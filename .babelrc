@@ -1,0 +1,22 @@
+{
+    "presets": [
+        ["env", {
+            "modules": false
+        }],
+        "stage-1",
+        "react"
+    ],
+    "plugins": [
+        "react-loadable/babel",
+        "transform-decorators-legacy",
+        "react-hot-loader/babel",
+        ["react-css-modules", {
+            "generateScopedName": "[path]_[name]_[local]_[hash:5]",
+            "filetypes": {
+                ".styl": {
+                    "syntax": "sugarss"
+                }
+            }
+        }]
+    ]
+}

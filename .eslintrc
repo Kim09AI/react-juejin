@@ -1,0 +1,7 @@
+{
+    "extends": "standard",
+    "rules": {
+        "indent": [2, 4],
+        "space-before-function-paren": 0
+    }
+}
