@@ -1,0 +1,54 @@
+.comment-list
+    .item:last-child
+        margin-bottom 0
+        .body
+            border-bottom: none
+    .item
+        display: flex
+        margin-bottom 1.333rem
+        .avatar
+            width: 2.667rem
+            height: 2.667rem
+            border-radius: 50%
+            background-repeat: no-repeat
+            background-size: cover
+        .body
+            flex: 1
+            margin-left: 10px
+            border-bottom: 1px solid #f1f1f1
+            .info
+                overflow hidden
+                white-space nowrap
+                text-overflow: ellipsis
+                .username
+                    color: #333333
+                    font-size: 1.083rem
+                .position
+                    color: #8a9aa9
+                    font-size: 1.083rem
+                    margin-left 4px
+            .comment
+                line-height: 1.5
+                margin-top .55rem
+                color: #505050
+                font-size: 1.083rem
+                word-break: break-all
+            .other-info
+                display: flex
+                justify-content: space-between
+                align-content: center
+                margin: 1rem 0
+                color: #8a9aa9
+                .time
+                    font-size: 1.083rem
+                .action-box
+                    display: flex
+                    .action-item + .action-item
+                        margin-left: 30px
+                    .action-item
+                        display flex
+                        align-items: center
+                        .reply-icon
+                            transform: scaleX(-1)
+                            margin-right 5px
+

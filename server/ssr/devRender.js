@@ -52,7 +52,9 @@ const createRequire = (fileSystem, basePath) => {
         // 把代码执行结果挂载到module.exports上
         try {
             result.call(m.exports, m.exports, _require, m)
-        } catch (err) {}
+        } catch (err) {
+            console.log(err)
+        }
 
         return m.exports
     }

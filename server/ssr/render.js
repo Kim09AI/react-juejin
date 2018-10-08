@@ -57,10 +57,14 @@ module.exports = async (template, serverBundle, req, res, next, stats) => {
         const { default: createApp, createStore, routes, createSSRApi } = serverBundle
         const location = url.parse(req.url)
         const store = createStore()
-        const api = createSSRApi(req.headers.cookie)
+
+        const userInfo = JSON.parse(req.cookies.userInfo || null)
+        const api = createSSRApi(userInfo)
         const helpers = { api }
 
         store.dispatch.api.initApi(api)
+        // 同步用户数据
+        userInfo && await store.dispatch.user.syncUserDetailForSSR(userInfo)
 
         loadOnServer({ store, location, routes })
             .then(() => {

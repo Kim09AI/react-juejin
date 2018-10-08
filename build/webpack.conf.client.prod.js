@@ -15,6 +15,59 @@ const r = dir => path.resolve(__dirname, '..', dir)
 const seen = new Set()
 const nameLength = 4
 
+const cssLoaders = (modulesCss) => {
+    // 处理项目目录内的css
+    const projectCssLoader = {
+        loader: 'css-loader',
+        options: {
+            modules: config.common.cssModules,
+            localIdentName: '[local]_[hash:5]',
+            sourceMap: true,
+            importLoaders: 2
+        }
+    }
+
+    // 处理node_modules目录内的css
+    const modulesCssLoader = {
+        loader: 'css-loader',
+        options: {
+            sourceMap: true,
+            importLoaders: 2
+        }
+    }
+
+    return [
+        MiniCssExtractPlugin.loader,
+        modulesCss ? modulesCssLoader : projectCssLoader,
+        {
+            loader: 'postcss-loader',
+            options: {
+                ident: 'postcss',
+                plugins: () => [
+                    require('postcss-flexbugs-fixes'),
+                    require('autoprefixer')({
+                        browsers: [
+                            '>1%',
+                            'last 4 versions',
+                            'Firefox ESR',
+                            'not ie < 9'
+                        ],
+                        flexbox: 'no-2009',
+                        remove: false
+                    })
+                ],
+                sourceMap: true
+            }
+        },
+        {
+            loader: 'stylus-loader',
+            options: {
+                sourceMap: true
+            }
+        }
+    ]
+}
+
 module.exports = merge(base, {
     mode: 'production',
     devtool: '#source-map',
@@ -48,41 +101,13 @@ module.exports = merge(base, {
             },
             {
                 test: /\.(css|styl)$/,
-                use: [
-                    MiniCssExtractPlugin.loader,
+                oneOf: [
                     {
-                        loader: 'css-loader',
-                        options: {
-                            modules: config.common.cssModules,
-                            localIdentName: '[path]_[name]_[local]_[hash:5]',
-                            sourceMap: true,
-                            importLoaders: 2
-                        }
+                        resource: /node_modules/,
+                        use: cssLoaders(true)
                     },
                     {
-                        loader: 'postcss-loader',
-                        options: {
-                            ident: 'postcss',
-                            plugins: () => [
-                                require('postcss-flexbugs-fixes'),
-                                require('autoprefixer')({
-                                    browsers: [
-                                        '>1%',
-                                        'last 4 versions',
-                                        'Firefox ESR',
-                                        'not ie < 9'
-                                    ],
-                                    flexbox: 'no-2009'
-                                })
-                            ],
-                            sourceMap: true
-                        }
-                    },
-                    {
-                        loader: 'stylus-loader',
-                        options: {
-                            sourceMap: true
-                        }
+                        use: cssLoaders(false)
                     }
                 ]
             }

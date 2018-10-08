@@ -1,0 +1,51 @@
+@import '../../assets/styles/mixin.styl'
+
+.repo-list
+    background-color: #ffffff
+    .item
+        border-bottom: 1px solid #f1f1f1
+        .link
+            display: block
+            padding: 24px 30px
+            .name
+                font-size: 1.35rem
+                color: #0366d6
+                overflow hidden
+                text-overflow: ellipsis
+                white-space nowrap
+                font-weight: bold
+                line-height: normal
+            .desc
+                color: #333333
+                font-size: 14px
+                line-height: 1.5
+                lineClamp(3)
+                margin-top 10px
+                word-break: break-all
+            .info
+                display: flex
+                align-items: center
+                margin-top 10px
+                .info-item
+                    margin-right: 25px
+                    .circle-icon
+                        display: inline-block
+                        width: 12px
+                        height: 12px
+                        border-radius: 50%
+                    .collect
+                        color: #333333
+                        font-size: 12px
+                        position relative
+                        top -2px
+                    .fork
+                        color: #333333
+                        font-size: 14px
+                    .text
+                        color: #666
+                        font-size: 1.167rem
+                        font-weight bold
+                        margin-left: 0.5rem
+                .update
+                    color: #b4b6b8
+                    font-size: 12px

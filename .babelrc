@@ -9,14 +9,33 @@
     "plugins": [
         "react-loadable/babel",
         "transform-decorators-legacy",
-        "react-hot-loader/babel",
-        ["react-css-modules", {
-            "generateScopedName": "[path]_[name]_[local]_[hash:5]",
-            "filetypes": {
-                ".styl": {
-                    "syntax": "sugarss"
-                }
-            }
-        }]
-    ]
+        "react-hot-loader/babel"
+    ],
+    "env": {
+        "development": {
+            "plugins": [
+                ["react-css-modules", {
+                    "generateScopedName": "[path]_[name]_[local]_[hash:5]",
+                    "filetypes": {
+                        ".styl": {
+                            "syntax": "sugarss"
+                        }
+                    },
+                    "handleMissingStyleName": "warn"
+                }]
+            ]
+        },
+        "production": {
+            "plugins": [
+                ["react-css-modules", {
+                    "generateScopedName": "[local]_[hash:5]",
+                    "filetypes": {
+                        ".styl": {
+                            "syntax": "sugarss"
+                        }
+                    }
+                }]
+            ]
+        }
+    }
 }

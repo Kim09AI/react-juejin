@@ -1,0 +1,44 @@
+@import '../../assets/styles/variable.styl'
+
+.entry-list-wrapper
+    background-color: $color-background
+    .item
+        padding: 1.5rem 2rem
+        border-bottom: 1px solid $color-border
+        .info-wrapper
+            font-size: 1rem
+            color: $color-text
+            .hot
+                color: $color-hot
+            .post
+                color: $color-purple
+            .circle
+                margin: 0 3px
+        .title-wrapper
+            margin 0.6rem 0 1rem 0
+            white-space nowrap
+            text-overflow ellipsis
+            overflow hidden
+            .title
+                font-size: 1.2rem
+                color: #2e3135
+                font-weight: bold
+                &:visited
+                    color: #909090
+        .action-wrapper
+            display: flex
+            .action-item
+                border: 1px solid #edeeef
+                padding: 0 .8rem
+                height: 1.5rem
+                display: flex
+                align-items: center
+                font-size: 1rem
+                color: $color-text
+                .text
+                    font-weight: bold
+                    margin-left: 3px
+                .approve
+                    font-size: 1.2rem
+                .comment
+                    font-size: 1.2rem

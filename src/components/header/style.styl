@@ -1,0 +1,83 @@
+@import '../../assets/styles/variable.styl'
+
+.header-wrapper
+    position relative
+    height 5rem
+    .header-content
+        position: fixed
+        top: 0
+        left 0
+        right 0
+        height 5rem
+        z-index: 999
+        display: flex
+        justify-content: space-between
+        padding: 0 2%
+        background-color: $color-background
+        border-bottom: 1px solid $color-border
+        transition: all 0.3s
+        &.hide
+            transform: translateY(-100%)
+        .header-nav
+            align-items: center
+            display: flex
+            height 100%
+            .nav-wrapper
+                position relative
+                height 100%
+                align-items: center
+                display: flex
+                padding: 0 2rem
+                .nav-current
+                    font-size: 1.3rem
+                    color: $color-blue
+                    cursor pointer
+                    margin-right: .5rem
+                .arrow
+                    font-size: 1.35rem
+                    color: $color-blue
+                    position relative
+                    top 2px
+                .nav-list
+                    position: absolute
+                    top: 100%
+                    left 0
+                    right 0
+                    display: none
+                    background-color: $color-background
+                    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1)
+                    border: 1px solid hsla(217, 5%, 71%, .45)
+                    text-align: center
+                    border-radius: 4px
+                    &.show
+                        display: block
+                    .item
+                        height: 4rem
+                        line-height: 4rem
+                        .link
+                            font-size: 1.33rem
+                            color: #71777c
+                            &.active
+                                color: $color-blue
+                    .other-item
+                        display: flex
+                        align-items: center
+                        height: 4rem
+                        justify-content: center
+                        .mini-programs
+                            width: 2.5rem
+        .header-auth
+            height: 100%
+            display: flex
+            align-items: center
+            .login-btn
+                font-size: 1.33rem
+                color: $color-blue
+                cursor pointer
+            .register-btn
+                font-size: 1.33rem
+                color: $color-blue
+            .circle
+                color: $color-blue
+                margin: 0 4px
+                cursor pointer

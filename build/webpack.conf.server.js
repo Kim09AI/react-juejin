@@ -1,5 +1,6 @@
 const webpack = require('webpack')
 const merge = require('webpack-merge')
+const nodeExternals = require('webpack-node-externals')
 const path = require('path')
 const base = require('./webpack.conf.base')
 const config = require('./config')
@@ -19,7 +20,9 @@ module.exports = merge(base, {
         libraryTarget: 'commonjs2',
         chunkFilename: 'server/[name].js'
     },
-    externals: [Object.keys(require('../package').dependencies)],
+    externals: [nodeExternals({
+        whitelist: [/lodash-es/, /\.css$/]
+    })],
     module: {
         rules: [
             {

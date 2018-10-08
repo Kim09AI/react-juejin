@@ -1,0 +1,47 @@
+@import '../../assets/styles/mixin.styl'
+
+.book-list
+    background-color: #ffffff
+    .item
+        padding: 16px 14px
+        border-bottom: 1px solid #f1f1f1
+        .link
+            display: flex
+            .icon
+                width: 52px
+                height: 72px
+                background-repeat: no-repeat
+                background-size: cover
+                margin-right: 15px
+            .content
+                flex: 1
+                .title
+                    color: #333333
+                    font-size: 16px
+                    font-weight: bold
+                    lineClamp()
+                .author
+                    margin-top 10px
+                    .username
+                        font-size: 14px
+                        color: #000000
+                .book-info
+                    font-size: 13px
+                    color: #71777c
+                    opacity 0.6
+                    margin-top 10px
+                    .circle
+                        margin: 0 3px
+            .right-box
+                margin-left: 10px
+                display: flex
+                align-items: center
+                .price
+                    display: inline-block
+                    padding: 0 15px
+                    height 30px
+                    line-height: 30px
+                    border-radius: 15px
+                    font-size: 14px
+                    background-color: #f0f7ff
+                    color: #07f

@@ -1,0 +1,74 @@
+.popup-wrapper
+    position: fixed
+    top: 0
+    left 0
+    right 0
+    bottom: 0
+    background-color: rgba(120, 120, 120, 0.4)
+    z-index: 999
+    align-items: center
+    display: none
+    &.active
+        display: flex
+    .content
+        width: 70%
+        max-width 400px
+        margin: 0 auto
+        background-color: #ffffff
+        padding: 2rem
+        border-radius: 2px
+        &.active
+            animation: scale-anim 0.4s
+        .header
+            display: flex
+            align-items: center
+            margin-bottom: 2rem
+            justify-content: space-between
+            .title
+                font-size: 1.5rem
+                color: #333333
+                font-weight: bold
+            .close
+                font-size: 1.167rem
+                color: #333333
+                cursor pointer
+        .form
+            .input
+                width: 100%
+                margin-bottom: 0.8rem
+                font-size: 1.167rem
+                border-radius: 2px
+                border: 1px solid #e9e9e9
+                outline: none
+                padding: 10px
+                box-sizing: border-box
+            .submit
+                height 3.334rem
+                background-color: #007fff
+                border-radius: 2px
+                display: block
+                color: #ffffff
+                justify-content: center
+                display: flex
+                align-items: center
+                font-size: 1.2rem
+        .footer
+            margin-top 1rem
+            text-align: center
+            color: #8b9196
+            .footer-text
+                color: #007fff
+                cursor pointer
+                font-size: 1.167rem
+        .footer-login
+            display: flex
+            justify-content: space-between
+
+@keyframes scale-anim
+    0%
+        transform scale(0)
+    60%
+        transform scale(1.1)
+    100%
+        transform scale(1)
+

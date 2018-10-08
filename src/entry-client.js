@@ -7,14 +7,14 @@ import { Provider } from 'react-redux'
 import { AppContainer } from 'react-hot-loader' // eslint-disable-line
 import Loadable from 'react-loadable'
 import { ReduxAsyncConnect } from 'redux-connect'
-import FastClick from 'fastclick'
+// import FastClick from 'fastclick'
 
 import createStore from './store'
 import routesConfig from './routes'
 import api from './api'
 import './assets/styles/index.styl'
 
-FastClick.attach(document.body)
+// FastClick.attach(document.body)
 
 const initialState = window.__INITIAL_STATE__ || {} // eslint-disable-line
 

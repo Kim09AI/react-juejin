@@ -1,0 +1,63 @@
+.pin-list
+    .item
+        background-color: #ffffff
+        margin-bottom 8px
+        border-bottom: 1px solid #f1f1f1
+        .header
+            display: flex
+            align-items: center
+            padding: 16px 2rem 0 20px
+            .avatar-box
+                margin-right 1rem
+                .avatar
+                    width: 3.5rem
+                    height: 3.5rem
+                    border-radius: 50%
+                    background-size: cover
+                    background-repeat: no-repeat
+            .user-info
+                flex: 1
+                .name
+                    color: #2e3135
+                    font-size: 1.25rem
+                    font-weight: bold
+                .pos
+                    margin-top 6px
+                    .time
+                        font-size: 13px
+                        color: #8a9aa9
+            .more-action
+                color: #8a93a0
+                font-size: 20px
+        .body
+            margin-top 6px
+            padding: 0 2rem
+        .footer
+            margin-top 10px
+            border-top: 1px solid #ebebeb
+            display: flex
+            height 34px
+            .action + .action
+                &:before
+                    content: ''
+                    border-left: 1px solid #ebebeb
+                    position: absolute
+                    left 0
+                    top: 0
+                    bottom: 0
+                    height 70%
+                    margin: auto
+            .action
+                flex: 1
+                height 100%
+                display: flex
+                align-items: center
+                justify-content: center
+                color: #8a93a0
+                position relative
+                .comment-icon
+                    display: inline-flex
+                    transform: scaleX(-1)
+                span
+                    margin-left 4px
+                    font-size: 13px

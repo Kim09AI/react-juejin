@@ -1,0 +1,130 @@
+import React from 'react'
+import { Link, withRouter } from 'react-router-dom'
+import { connect } from 'react-redux'
+import classNames from 'classnames'
+import PropTypes from 'prop-types'
+import ScrollAndTranslate from '../scrollAndTranslate'
+import './style.styl'
+
+const mapDispatch = ({ authPopup: { showAuthPopup } }) => ({
+    showAuthPopup
+})
+
+@withRouter
+@connect(null, mapDispatch)
+@ScrollAndTranslate
+export default class Header extends React.Component {
+    static propTypes = {
+        location: PropTypes.object.isRequired,
+        showAuthPopup: PropTypes.func.isRequired,
+        history: PropTypes.object.isRequired,
+        translateTo: PropTypes.bool.isRequired
+    }
+
+    constructor(props) {
+        super(props)
+
+        const navList = [
+            { text: '首页', path: '/' },
+            { text: '沸点', path: '/pins' },
+            { text: '小册', path: '/books' },
+            { text: '开源库', path: '/repos' },
+            { text: '活动', path: '/events' }
+        ]
+        const currentIndex = this.getCurrentIndex(navList, props.location.pathname)
+        this.state = {
+            navList,
+            currentIndex,
+            showNavList: false
+        }
+    }
+
+    componentDidMount() {
+        document.addEventListener('click', this.hideNavList)
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.history.location.pathname !== this.props.location.pathname) {
+            const currentIndex = this.getCurrentIndex(this.state.navList, nextProps.history.location.pathname)
+            this.setState(() => ({
+                currentIndex
+            }))
+        }
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('click', this.hideNavList)
+    }
+
+    getCurrentIndex(navList, pathname) {
+        const index = navList.findIndex(item => item.path === pathname)
+        return index
+    }
+
+    toggleNavList = () => {
+        this.setState(prevState => ({
+            showNavList: !prevState.showNavList
+        }))
+    }
+
+    hideNavList = (e) => {
+        if (this.nav === e.target || $.contains(this.nav, e.target)) {
+            return
+        }
+
+        if (this.state.showNavList) {
+            this.setState({
+                showNavList: false
+            })
+        }
+    }
+
+    render() {
+        const { navList, currentIndex, showNavList } = this.state
+        const { showAuthPopup, translateTo } = this.props
+
+        return (
+            <div styleName="header-wrapper">
+                <div styleName={classNames({ 'header-content': true, hide: !translateTo })}>
+                    <div styleName="header-nav">
+                        <Link to="/">
+                            <img src="https://b-gold-cdn.xitu.io/v3/static/img/logo.a7995ad.svg" alt="juejin" />
+                        </Link>
+                        <div styleName="nav-wrapper" onClick={this.toggleNavList} ref={nav => { this.nav = nav }}>
+                            <span styleName="nav-current">{navList[currentIndex] ? navList[currentIndex].text : '首页'}</span>
+                            <i className="iconfont" styleName="arrow">&#xe6aa;</i>
+                            <ul styleName={classNames({ 'nav-list': true, show: showNavList })}>
+                                {
+                                    navList.map((nav, index) => (
+                                        <li key={nav.text} styleName="item">
+                                            <Link
+                                                to={nav.path}
+                                                styleName={classNames({ link: true, active: currentIndex === index })}
+                                            >
+                                                {nav.text}
+                                            </Link>
+                                        </li>
+                                    ))
+                                }
+                                <li styleName="other-item">
+                                    <a href="https://conf.juejin.im/2018/mini-programs">
+                                        <img
+                                            styleName="mini-programs"
+                                            src="https://b-gold-cdn.xitu.io/v3/static/img/conf.78960f5.gif"
+                                            alt="掘金开发者大会 · 微信小程序专场"
+                                        />
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div styleName="header-auth">
+                        <span styleName="login-btn" onClick={() => showAuthPopup('login')}>登录</span>
+                        <span styleName="circle">·</span>
+                        <span styleName="register-btn" onClick={() => showAuthPopup('register')}>注册</span>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+}
