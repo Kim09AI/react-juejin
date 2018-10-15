@@ -1,4 +1,6 @@
-export default hostConfig => ({
+import { hostConfig } from './config'
+
+export default {
     // 获取小册分类
     getNavList() {
         return this.get(`${hostConfig.xiaoce}/getNavList`)
@@ -14,4 +16,4 @@ export default hostConfig => ({
             }
         })
     }
-})
+}

@@ -1,0 +1,50 @@
+.user-menu
+    position relative
+    padding-left: 1.2rem
+    height: 100%
+    display: flex
+    align-items: center
+    .avatar
+        border-radius: 50%
+        width: 2.5rem
+        height: 2.5rem
+        background-color: rgba(120, 120, 120, .2)
+        cursor pointer
+    .menu-list
+        position: absolute
+        top: 100%
+        right 0
+        width: 13rem
+        display: none
+        background-color: #ffffff
+        border: 1px solid hsla(217,5%,71%,.45)
+        box-shadow: 0 1px 2px 0 rgba(0,0,0,.1)
+        border-radius: 4px
+        &.active
+            display: block
+        .item-group:last-child
+            border-bottom: none
+        .item-group
+            padding: 1rem 0
+            border-bottom: 1px solid rgba(0,0,0,.04)
+            .item
+                padding: .6rem 1rem
+                color: #71777c
+                display: block
+                :global
+                    .iconfont
+                        color: #b2bac2
+                .collect
+                    font-size: 18px
+                    position relative
+                    top -1px
+                .shop
+                    display: inline-flex
+                    transform: scaleX(-1)
+                .tag
+                    font-size: 16px
+                .setting
+                    font-size: 18px
+                .menu-text
+                    margin-left .8rem
+                    font-size: 1.3rem

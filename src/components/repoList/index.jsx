@@ -28,19 +28,19 @@ export default function RepoList(props) {
                             <div styleName="name">{item.userName} / {item.repoName}</div>
                             <div styleName="desc">{item.description}</div>
                             <div styleName="info">
-                                <div styleName="info-item">
+                                <span styleName="info-item">
                                     <i styleName="circle-icon" style={{ backgroundColor: colorConfig[item.language] || colorConfig.default }} />
                                     <span styleName="text">{item.language}</span>
-                                </div>
-                                <div styleName="info-item">
+                                </span>
+                                <span styleName="info-item">
                                     <i className="iconfont" styleName="collect">&#xe632;</i>
                                     <span styleName="text">{item.stars}</span>
-                                </div>
-                                <div styleName="info-item">
+                                </span>
+                                <span styleName="info-item">
                                     <i className="iconfont" styleName="fork">&#xe745;</i>
                                     <span styleName="text">{item.fork}</span>
-                                </div>
-                                <div styleName="update">{timeFormat(item.pushedAt)}更新</div>
+                                </span>
+                                <span styleName="update">{timeFormat(item.pushedAt)}更新</span>
                             </div>
                         </a>
                     </li>

@@ -34,6 +34,14 @@ const routes = [{
             component: routerComponents.Post
         },
         {
+            path: '/user/setting',
+            component: routerComponents.Setting
+        },
+        {
+            path: '/user/:id',
+            component: routerComponents.User
+        },
+        {
             path: '*',
             component: () => <div>404 Not Found</div>
         }

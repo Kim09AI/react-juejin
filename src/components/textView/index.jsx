@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { linkPattern } from '../../utils'
 import './style.styl'
+
+const linkPattern = /(((http|https):\/\/)([\w-]+\.)+[\w-]+(\/[\w\u4e00-\u9fa5\-./?@%!&=+~:#;,]*)?)/ig
 
 export default class TextView extends React.Component {
     static defaultProps = {
@@ -60,11 +61,7 @@ export default class TextView extends React.Component {
             }
 
             // 截取的位置包含该链接
-            if (newSubLen > start) {
-                newSubLen += end - start
-                return false
-            }
-
+            newSubLen += end - start
             return false
         })
 

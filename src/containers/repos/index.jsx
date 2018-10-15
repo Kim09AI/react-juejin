@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
+import Helmet from 'react-helmet'
 import RepoList from '../../components/repoList'
 import Pullup from '../../components/pullup'
 import './style.styl'
@@ -31,6 +32,9 @@ export default class Repos extends React.Component {
 
         return (
             <div className="main">
+                <Helmet>
+                    <title>开源库 - 掘金</title>
+                </Helmet>
                 <div styleName="header">
                     <h3 styleName="title">推荐开源库</h3>
                     <div styleName="btn">

@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
+import Helmet from 'react-helmet'
 import NavList from '../../components/navList'
 import BookList from '../../components/bookList'
 import Pullup from '../../components/pullup'
@@ -57,6 +58,9 @@ export default class Books extends React.Component {
 
         return (
             <div>
+                <Helmet>
+                    <title>掘金小册</title>
+                </Helmet>
                 <NavList list={navList} selectedIndex={currentIndex} getLink={(nav) => `/books/${nav.alias || ''}`} />
                 <BookList list={bookList} />
                 <Pullup loader={this._getBookList} />

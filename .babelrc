@@ -15,7 +15,7 @@
         "development": {
             "plugins": [
                 ["react-css-modules", {
-                    "generateScopedName": "[path]_[name]_[local]_[hash:5]",
+                    "generateScopedName": "[path]_[name]_[local]_[hash:base64:5]",
                     "filetypes": {
                         ".styl": {
                             "syntax": "sugarss"
@@ -28,7 +28,7 @@
         "production": {
             "plugins": [
                 ["react-css-modules", {
-                    "generateScopedName": "[local]_[hash:5]",
+                    "generateScopedName": "[local]_[hash:base64:5]",
                     "filetypes": {
                         ".styl": {
                             "syntax": "sugarss"

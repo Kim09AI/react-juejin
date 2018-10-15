@@ -1,6 +1,7 @@
 @import '../../assets/styles/variable.styl'
 
-.category
+
+.header
     display: flex
     align-items: center
     justify-content: space-between
@@ -12,3 +13,20 @@
     .more
         color: $color-black
         font-size: 12px
+.category
+    padding: 1.3rem 1rem
+    border-bottom: 1px solid $color-border
+    .item + .item
+        border-left: 1px solid hsla(0,0%,59%,.2)
+    .item
+        color: #909090
+        font-size: 1.16rem
+        padding: 0 1.2rem
+        &.active
+            color: #007fff
+
+:global
+    .home-init-class
+        top: 61px!important
+    .home-translate-class
+        transform: translateY(-61px)!important

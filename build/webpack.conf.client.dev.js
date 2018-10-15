@@ -14,9 +14,10 @@ const cssLoaders = (modulesCss) => {
         loader: 'css-loader',
         options: {
             modules: config.common.cssModules,
-            localIdentName: '[path]_[name]_[local]_[hash:5]',
+            localIdentName: '[path]_[name]_[local]_[hash:base64:5]',
             sourceMap: true,
-            importLoaders: 2
+            importLoaders: 2,
+            camelCase: true
         }
     }
 

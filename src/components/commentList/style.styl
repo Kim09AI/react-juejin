@@ -16,6 +16,7 @@
             flex: 1
             margin-left: 10px
             border-bottom: 1px solid #f1f1f1
+            overflow hidden
             .info
                 overflow hidden
                 white-space nowrap
@@ -43,12 +44,15 @@
                     font-size: 1.083rem
                 .action-box
                     display: flex
-                    .action-item + .action-item
-                        margin-left: 30px
+                    width: 95px
+                    justify-content: space-between
                     .action-item
                         display flex
                         align-items: center
+                        &.active
+                            color: #37c700
+                        .like
+                            margin-right 4px
                         .reply-icon
                             transform: scaleX(-1)
                             margin-right 5px
-

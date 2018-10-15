@@ -28,7 +28,7 @@ export default class Pullup extends React.Component {
     scroll = async () => {
         if (this.state.loaded) return
 
-        const top = document.documentElement.scrollTop || document.body.scrollTop
+        const top = $(window).scrollTop()
         const docH = document.documentElement.scrollHeight || document.body.scrollHeight
         const { clientHeight } = document.documentElement
 

@@ -1,12 +1,24 @@
-export default hostConfig => ({
-    // 获取热门文章
-    getEntryByRank({ limit = 20, category = 'all', before } = {}) {
-        return this.get(`${hostConfig.timeline}/get_entry_by_rank`, {
+import { hostConfig } from './config'
+
+export default {
+    // 获取文章
+    getEntry({ limit = 20, category = 'all', before, recomment, sort = 'popular' } = {}) {
+        const sortInfo = {
+            popular: 'get_entry_by_rank',
+            newest: 'get_entry_by_timeline',
+            comment: 'get_entry_by_comment',
+            default: 'get_entry_by_rank'
+        }
+
+        const url = sortInfo[sort] || sortInfo.default
+
+        return this.get(`${hostConfig.timeline}/${url}`, {
             params: {
                 src: 'web',
                 limit,
                 category,
-                before
+                before,
+                recomment
             }
         })
     },
@@ -50,5 +62,83 @@ export default hostConfig => ({
                 before
             }
         })
+    },
+
+    // 点赞文章
+    entryUserLike({ postId, clientId, token, uid }) {
+        return this.put(`${hostConfig.like}/user/like/entry/${postId}`, null, {
+            headers: {
+                'X-Juejin-Src': 'web',
+                'X-Juejin-Client': clientId,
+                'X-Juejin-Token': token,
+                'X-Juejin-Uid': uid
+            }
+        })
+    },
+
+    // 取消点赞文章
+    cancelEntryUserLike({ postId, clientId, token, uid }) {
+        return this.delete(`${hostConfig.like}/user/like/entry/${postId}`, {
+            headers: {
+                'X-Juejin-Src': 'web',
+                'X-Juejin-Client': clientId,
+                'X-Juejin-Token': token,
+                'X-Juejin-Uid': uid
+            }
+        })
+    },
+
+    // 获取是否点赞文章
+    getEntryUserLike({ postId, clientId, token, uid }) {
+        return this.get(`${hostConfig.like}/user/like/entry/${postId}`, {
+            headers: {
+                'X-Juejin-Src': 'web',
+                'X-Juejin-Client': clientId,
+                'X-Juejin-Token': token,
+                'X-Juejin-Uid': uid
+            }
+        })
+    },
+
+    // 获取文章分类
+    getCategories() {
+        return this.get(`${hostConfig.gold}/categories`, {
+            headers: {
+                'X-Juejin-Src': 'web'
+            }
+        })
+    },
+
+    // 点赞评论
+    commentLike({ commentId, postId, targetType = 'entry', clientId, token, uid }) {
+        const data = {
+            targetId: postId,
+            targetType
+        }
+
+        return this.put(`${hostConfig.comment}/comment/${commentId}/like`, data, {
+            headers: {
+                'X-Juejin-Src': 'web',
+                'X-Juejin-Client': clientId,
+                'X-Juejin-Token': token,
+                'X-Juejin-Uid': uid
+            }
+        })
+    },
+
+    // 取消点赞评论
+    cancelCommentLike({ commentId, postId, targetType = 'entry', clientId, token, uid }) {
+        return this.delete(`${hostConfig.comment}/comment/${commentId}/like`, {
+            params: {
+                targetId: postId,
+                targetType
+            },
+            headers: {
+                'X-Juejin-Src': 'web',
+                'X-Juejin-Client': clientId,
+                'X-Juejin-Token': token,
+                'X-Juejin-Uid': uid
+            }
+        })
     }
-})
+}

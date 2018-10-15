@@ -15,7 +15,7 @@
             .circle
                 margin: 0 3px
         .title-wrapper
-            margin 0.6rem 0 1rem 0
+            margin 0.6rem 0 0.9rem 0
             white-space nowrap
             text-overflow ellipsis
             overflow hidden
@@ -23,10 +23,11 @@
                 font-size: 1.2rem
                 color: #2e3135
                 font-weight: bold
+                line-height: normal
                 &:visited
                     color: #909090
         .action-wrapper
-            display: flex
+            display: inline-flex
             .action-item
                 border: 1px solid #edeeef
                 padding: 0 .8rem
@@ -35,10 +36,17 @@
                 align-items: center
                 font-size: 1rem
                 color: $color-text
+                &.active
+                    color: #6cbd45
                 .text
                     font-weight: bold
                     margin-left: 3px
-                .approve
+                    color: $color-text
+                .approve, .comment, .share
                     font-size: 1.2rem
-                .comment
+                .collect
                     font-size: 1.2rem
+                    position relative
+                    top -1px
+        .action-wrapper + .action-wrapper
+            margin-left 10px

@@ -11,7 +11,7 @@ export default Component => class extends React.Component {
     }
 
     state = {
-        translateTo: true
+        translateTo: false, // 是否满足位移条件
     }
 
     componentDidMount() {
@@ -23,16 +23,17 @@ export default Component => class extends React.Component {
     }
 
     scroll = () => {
-        const top = document.documentElement.scrollTop || document.body.scrollTop
+        const top = $(window).scrollTop()
         const prevTop = this.prevTop !== undefined ? this.prevTop : top
 
+        // 往上滚动超过临界点，即满足位移的条件
         if (top > prevTop && top > this.props.boundaryTop) {
-            this.state.translateTo === true && this.setState({
-                translateTo: false
-            })
-        } else if (top < prevTop) {
             this.state.translateTo === false && this.setState({
                 translateTo: true
+            })
+        } else if (top < prevTop) {
+            this.state.translateTo === true && this.setState({
+                translateTo: false
             })
         }
 

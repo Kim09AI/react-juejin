@@ -71,7 +71,7 @@ export default class AuthPopup extends React.Component {
         const { phone, password } = this.state
         return this.props.loginByPhoneNumber({ phoneNumber: phone.trim(), password: password.trim() })
             .then(() => {
-                this.props.hideAuthPopup()
+                window.location.reload()
             })
     }
 

@@ -28,7 +28,10 @@ module.exports = merge(base, {
             {
                 test: /\.(js|jsx)$/,
                 use: {
-                    loader: 'babel-loader'
+                    loader: 'babel-loader',
+                    options: {
+                        cacheDirectory: true
+                    }
                 },
                 include: r('src')
             },

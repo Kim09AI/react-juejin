@@ -9,17 +9,6 @@ import other from './other'
 const host = process.env.HOST || 'localhost'
 const port = process.env.PORT || 3000
 
-const hostConfig = {
-    timeline: '/timeline',
-    xiaoce: '/xiaoce',
-    repo: '/repo',
-    shortMsg: '/shortMsg',
-    post: '/post',
-    comment: '/comment',
-    juejin: '/juejin',
-    user: '/user'
-}
-
 const serviceConfig = [
     post,
     user,
@@ -28,7 +17,8 @@ const serviceConfig = [
 ]
 
 const instance = axios.create({
-    baseURL: process.env.isClient ? '/api' : `http://${host}:${port}/api`
+    baseURL: process.env.isClient ? '/api' : `http://${host}:${port}/api`,
+    timeout: 10000
 })
 
 instance.interceptors.request.use(config => config, err => Promise.reject(err))
@@ -37,13 +27,13 @@ instance.interceptors.response.use(res => res, err => Promise.reject(err))
 class Service {
     constructor(userInfo) {
         this.userInfo = userInfo
+        if (userInfo && userInfo.clientId) {
+            this.userInfo.device_id = userInfo.clientId
+        }
     }
 
     get(url, config = {}) {
-        const params = Object.assign({}, config.params, {
-            ...this.userInfo,
-            device_id: this.userInfo ? this.userInfo.clientId : undefined
-        })
+        const params = Object.assign({}, config.params, this.userInfo)
 
         return instance.get(url, {
             ...config,
@@ -52,21 +42,33 @@ class Service {
     }
 
     post(url, data, config = {}) {
-        const _data = Object.assign({}, data, {
-            ...this.userInfo,
-            device_id: this.userInfo ? this.userInfo.clientId : undefined
-        })
+        const _data = Object.assign({}, data, this.userInfo)
 
         return instance.post(url, qs.stringify(_data), config)
     }
 
-    clearUserInfo() {
-        this.userInfo = null
+    put(url, data, config = {}) {
+        const _data = Object.assign({}, data, this.userInfo)
+
+        return instance.put(url, qs.stringify(_data), config)
+    }
+
+    delete(url, config = {}) {
+        const params = Object.assign({}, config.params, this.userInfo)
+
+        return instance.delete(url, {
+            ...config,
+            params
+        })
+    }
+
+    setUserInfo(userInfo) {
+        this.userInfo = userInfo
     }
 }
 
 // 添加数据获取的方法到Service的原型
-merge(Service.prototype, ...serviceConfig.map(item => item(hostConfig)))
+merge(Service.prototype, ...serviceConfig)
 
 export function createSSRApi(userInfo) {
     return new Service(userInfo)

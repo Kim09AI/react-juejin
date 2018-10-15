@@ -9,7 +9,8 @@
     "clear": "rimraf dist",
     "build:client": "cross-env NODE_ENV=production webpack --config build/webpack.conf.client.js --progress --hide-modules",
     "build:server": "cross-env NODE_ENV=production webpack --config build/webpack.conf.server.js --progress --hide-modules",
-    "build": "npm run clear && npm run build:client && npm run build:server && npm run asyncComonCss",
+    "build": "npm run auto:dll && npm run clear && npm run build:client && npm run build:server && npm run asyncComonCss",
+    "auto:dll": "node build/dll/autoDll.js",
     "asyncComonCss": "node build/asyncComonCss.js",
     "start": "cross-env NODE_ENV=production node server/index.js",
     "lint": "eslint --ext .jsx --ext .js src/",
@@ -24,6 +25,7 @@
   "author": "Kim09",
   "license": "ISC",
   "devDependencies": {
+    "assets-webpack-plugin": "^3.9.7",
     "autoprefixer": "^9.1.5",
     "babel-core": "^6.26.3",
     "babel-eslint": "^9.0.0",
@@ -92,13 +94,16 @@
     "react": "^16.5.1",
     "react-dom": "^16.5.1",
     "react-helmet": "^5.2.0",
+    "react-lazyload": "^2.3.0",
     "react-loadable": "^5.5.0",
     "react-redux": "^5.0.7",
     "react-router-config": "^1.0.0-beta.4",
     "react-router-dom": "^4.3.1",
+    "react-swipe": "^5.1.1",
     "react-toastify": "^4.4.0",
     "redux-connect": "^8.0.0",
     "regenerator-runtime": "^0.12.1",
-    "serialize-javascript": "^1.5.0"
+    "serialize-javascript": "^1.5.0",
+    "swipe-js-iso": "^2.0.4"
   }
 }

@@ -21,9 +21,10 @@ const cssLoaders = (modulesCss) => {
         loader: 'css-loader',
         options: {
             modules: config.common.cssModules,
-            localIdentName: '[local]_[hash:5]',
+            localIdentName: '[local]_[hash:base64:5]',
             sourceMap: true,
-            importLoaders: 2
+            importLoaders: 2,
+            camelCase: true
         }
     }
 
@@ -95,7 +96,10 @@ module.exports = merge(base, {
             {
                 test: /\.(js|jsx)$/,
                 use: {
-                    loader: 'babel-loader'
+                    loader: 'babel-loader',
+                    options: {
+                        cacheDirectory: true
+                    }
                 },
                 include: r('src')
             },
@@ -162,7 +166,11 @@ module.exports = merge(base, {
                 collapseWhitespace: true,
                 removeAttributeQuotes: true
             },
-            chunksSortMode: 'dependency'
+            chunksSortMode: 'dependency',
+            dll: `<script src="/${require('./dll/bundle-conf').base.js}"></script>`
+        }),
+        new webpack.DllReferencePlugin({
+            manifest: require('./dll/base-manifest.json')
         }),
         new webpack.DefinePlugin({
             'process.env': {

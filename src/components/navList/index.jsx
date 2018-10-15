@@ -27,8 +27,8 @@ export default class NavList extends React.Component {
         return (
             <div styleName="nav-wrapper">
                 <ul
-                    className={classNames({ [initClass]: true, [translateClass]: !translateTo })}
-                    styleName={classNames({ 'nav-list': true, translate: !translateTo })}
+                    className={classNames({ [initClass]: true, [translateClass]: translateTo })}
+                    styleName={classNames({ 'nav-list': true, translate: translateTo })}
                 >
                     {
                         list.map((nav, index) => (

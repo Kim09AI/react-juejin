@@ -2,23 +2,33 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
+import Helmet from 'react-helmet'
+import classNames from 'classnames'
+import qs from 'qs'
+
 import CommentList from '../../components/commentList'
 import EntryList from '../../components/entryList'
 import Pullup from '../../components/pullup'
+import CommentInput from '../../components/commentInput'
 import { format } from '../../utils'
+import { scrollToElement } from '../../utils/dom'
 import './style.styl'
 
 const mapState = ({ post, loading }) => ({
     info: post.info,
     content: post.content,
     commentList: post.commentList,
-    loadComment: loading.effects.post.getComment,
+    loadingComment: loading.effects.post.getComment,
     recommendEntry: post.recommendEntry
 })
 
-const mapDispatch = ({ post: { getComment, getRecommendEntryByTagIds } }) => ({
-    getComment,
-    getRecommendEntryByTagIds
+const mapDispatch = ({ post }) => ({
+    getComment: post.getComment,
+    getRecommendEntryByTagIds: post.getRecommendEntryByTagIds,
+    togglePostLike: post.togglePostLike,
+    checkPostLike: post.checkPostLike,
+    toggleRecommendEntryLike: post.toggleRecommendEntryLike,
+    toggleCommentLike: post.toggleCommentLike
 })
 
 @connect(mapState, mapDispatch)
@@ -27,23 +37,35 @@ export default class Post extends React.Component {
         info: PropTypes.object.isRequired,
         content: PropTypes.object.isRequired,
         commentList: PropTypes.array.isRequired,
-        loadComment: PropTypes.bool.isRequired,
+        loadingComment: PropTypes.bool.isRequired,
         getComment: PropTypes.func.isRequired,
         recommendEntry: PropTypes.array.isRequired,
-        getRecommendEntryByTagIds: PropTypes.func.isRequired
-    }
-
-    state = {
-        comment: ''
+        getRecommendEntryByTagIds: PropTypes.func.isRequired,
+        togglePostLike: PropTypes.func.isRequired,
+        checkPostLike: PropTypes.func.isRequired,
+        toggleRecommendEntryLike: PropTypes.func.isRequired,
+        toggleCommentLike: PropTypes.func.isRequired
     }
 
     componentDidMount() {
         const isLoadingRecommend = this.initCheckLoadRecommend()
         !isLoadingRecommend && window.addEventListener('scroll', this.lazyLoadRecommend)
+
+        this.props.checkPostLike({ postId: this.props.info.objectId })
+
+        const search = window.location.search.substr(1)
+        const { pos } = qs.parse(search)
+        if (pos === 'comment') {
+            this.scrollToComment()
+        }
     }
 
     componentWillUnmount() {
         window.removeEventListener('scroll', this.lazyLoadRecommend)
+    }
+
+    commentSubmit = (value) => {
+        console.log(value)
     }
 
     getTagIds(tags) {
@@ -89,10 +111,8 @@ export default class Post extends React.Component {
         }
     }
 
-    commentChange = (e) => {
-        this.setState({
-            comment: e.target.value
-        })
+    scrollToComment = () => {
+        scrollToElement(this.commentWrapper, -100)
     }
 
     _getMoreComment = () => {
@@ -107,12 +127,47 @@ export default class Post extends React.Component {
         return this.props.getComment(data)
     }
 
+    _togglePostLike = () => {
+        const payload = {
+            postId: this.props.info.objectId,
+            isApprove: !this.props.info.isCollected,
+            auth: true
+        }
+
+        return this.props.togglePostLike(payload)
+    }
+
+    _toggleRecommentPostLike = (postId, index, isApprove) => {
+        const payload = {
+            postId,
+            index,
+            isApprove,
+            auth: true
+        }
+
+        return this.props.toggleRecommendEntryLike(payload)
+    }
+
+    _toggleCommentLike = (commentId, isLike, index) => {
+        const payload = {
+            postId: this.props.info.objectId,
+            commentId,
+            isLike,
+            index,
+            auth: true
+        }
+
+        return this.props.toggleCommentLike(payload)
+    }
+
     render() {
-        const { info, content, commentList, loadComment, recommendEntry } = this.props
-        const { comment } = this.state
+        const { info, content, commentList, loadingComment, recommendEntry } = this.props
 
         return (
             <div style={{ marginBottom: '50px' }}>
+                <Helmet>
+                    <title>{info.title} - 掘金</title>
+                </Helmet>
                 <div className="main" styleName="post-wrapper">
                     <div styleName="user">
                         <Link to={`/user/${info.user.objectId}`}>
@@ -132,13 +187,11 @@ export default class Post extends React.Component {
                     <div className="markdown-body" styleName="markdown" dangerouslySetInnerHTML={{ __html: content.transcodeContent }} />
                     <div styleName="comment-wrapper" ref={commentWrapper => { this.commentWrapper = commentWrapper }}>
                         <div styleName="title">评论</div>
-                        <div styleName="input-wrapper">
-                            <input type="text" styleName="comment-input" placeholder="输入评论..." value={comment} onChange={this.commentChange} />
-                        </div>
-                        <CommentList list={commentList} />
+                        <CommentInput submit={this.commentSubmit} />
+                        <CommentList list={commentList} onLikeClick={this._toggleCommentLike} />
                         {
                             commentList.length > 0 && (
-                                <div styleName="load-more" onClick={this._getMoreComment}>{loadComment ? '加载中...' : '查看更多 >'}</div>
+                                <div styleName="load-more" onClick={this._getMoreComment}>{loadingComment ? '加载中...' : '查看更多 >'}</div>
                             )
                         }
                     </div>
@@ -147,18 +200,22 @@ export default class Post extends React.Component {
                     recommendEntry.length > 0 && (
                         <div styleName="recommend-wrapper">
                             <div styleName="recommend-title">相关推荐</div>
-                            <EntryList entryList={recommendEntry} />
+                            <EntryList entryList={recommendEntry} onApproveClick={this._toggleRecommentPostLike} />
                             <Pullup loader={this.getRecommendEntry} />
                         </div>
                     )
                 }
                 <div styleName="action-wrapper">
                     <div styleName="action-content">
-                        <div styleName="action-item">
-                            <i className="iconfont" styleName="praise-icon">&#xe600;</i>
+                        <div styleName={classNames({ 'action-item': true, active: info.isCollected })} onClick={this._togglePostLike}>
+                            <i
+                                className="iconfont"
+                                styleName="praise-icon"
+                                dangerouslySetInnerHTML={{ __html: info.isCollected ? '&#xe630;' : '&#xe600;' }}
+                            />
                             <span styleName="text">{info.collectionCount}</span>
                         </div>
-                        <div styleName="action-item">
+                        <div styleName="action-item" onClick={this.scrollToComment}>
                             <i className="iconfont" styleName="comment-icon">&#xe662;</i>
                             <span styleName="text">{info.commentsCount}</span>
                         </div>

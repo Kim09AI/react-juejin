@@ -7,6 +7,7 @@ import { ToastContainer, Flip } from 'react-toastify'
 import ProgressBar from './components/progressBar'
 import Header from './components/header'
 import AuthPopup from './components/authPopup'
+import ScrollRestoration from './components/scrollRestoration'
 
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -24,8 +25,8 @@ export default class App extends React.Component {
 
     constructor(props) {
         super(props)
-        const whiteList = ['/books'] // 不显示header的白名单
-        const showHeader = !this.isMatch(whiteList, props.location.pathname)
+        const whiteList = ['/books', '/user'] // 不显示header的白名单
+        const showHeader = this.shouldShowHeader(whiteList, props.location.pathname)
         this.state = {
             showHeader,
             whiteList
@@ -34,7 +35,7 @@ export default class App extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.location.pathname !== this.props.location.pathname) {
-            if (this.isMatch(this.state.whiteList, nextProps.location.pathname)) {
+            if (!this.shouldShowHeader(this.state.whiteList, nextProps.location.pathname)) {
                 this.setState({
                     showHeader: false
                 })
@@ -46,9 +47,8 @@ export default class App extends React.Component {
         }
     }
 
-    // 判断pathname是否以特定字符开头
-    isMatch(whiteList, pathname) {
-        return whiteList.some(_pathname => pathname.startsWith(_pathname))
+    shouldShowHeader(whiteList, pathname) {
+        return !whiteList.some(_pathname => pathname.startsWith(_pathname))
     }
 
     render() {
@@ -75,8 +75,9 @@ export default class App extends React.Component {
                     style={{ textAlign: 'center' }}
                 />
                 {showHeader ? <Header boundaryTop={800} /> : null}
-                {renderRoutes(route.routes)}
                 {!isLogin && <AuthPopup />}
+                <ScrollRestoration />
+                {renderRoutes(route.routes)}
             </div>
         )
     }

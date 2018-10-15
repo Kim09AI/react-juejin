@@ -14,11 +14,12 @@ export const progressBarMiddleware = ({ getState, dispatch }) => next => action 
     return next(action)
 }
 
-// 对需要登录的用户操作进行拦截
+// 对需要登录的用户操作进行验证拦截
 export const authrizedMiddleware = ({ getState, dispatch }) => next => action => {
     const { payload } = action
-    const { isLogin } = getState().user.isLogin
+    const { isLogin } = getState().user
 
+    // 通过auth字段判断是否需要登录才能操作
     if (payload && payload.auth === true && isLogin === false) {
         return dispatch({ type: 'authPopup/showAuthPopup' })
     }

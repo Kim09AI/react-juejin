@@ -8,12 +8,13 @@
     <%%- title %>
     <%%- link %>
     <%%- style %>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js"></script>
 </head>
 <body>
     <div id="root"><%%- appString %></div>
     <script>
         window.__INITIAL_STATE__ = <%%- initalState %>
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js"></script>
+    <%- htmlWebpackPlugin.options.dll || '' %>
 </body>
 </html>

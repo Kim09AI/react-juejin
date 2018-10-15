@@ -19,3 +19,9 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# dll
+/public/dll.*
+/build/dll/base-manifest.json
+/build/dll/bundle-conf.json
+/build/dll/versions.json

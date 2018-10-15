@@ -4,21 +4,31 @@ import { connect } from 'react-redux'
 import classNames from 'classnames'
 import PropTypes from 'prop-types'
 import ScrollAndTranslate from '../scrollAndTranslate'
+import UserMenu from '../userMenu'
 import './style.styl'
 
-const mapDispatch = ({ authPopup: { showAuthPopup } }) => ({
-    showAuthPopup
+const mapState = state => ({
+    isLogin: state.user.isLogin,
+    userDetail: state.user.userDetail
+})
+
+const mapDispatch = ({ authPopup: { showAuthPopup }, user: { logout } }) => ({
+    showAuthPopup,
+    logout
 })
 
 @withRouter
-@connect(null, mapDispatch)
+@connect(mapState, mapDispatch)
 @ScrollAndTranslate
 export default class Header extends React.Component {
     static propTypes = {
         location: PropTypes.object.isRequired,
         showAuthPopup: PropTypes.func.isRequired,
         history: PropTypes.object.isRequired,
-        translateTo: PropTypes.bool.isRequired
+        translateTo: PropTypes.bool.isRequired,
+        isLogin: PropTypes.bool.isRequired,
+        userDetail: PropTypes.object.isRequired,
+        logout: PropTypes.func.isRequired
     }
 
     constructor(props) {
@@ -81,11 +91,11 @@ export default class Header extends React.Component {
 
     render() {
         const { navList, currentIndex, showNavList } = this.state
-        const { showAuthPopup, translateTo } = this.props
+        const { showAuthPopup, translateTo, isLogin, userDetail, logout } = this.props
 
         return (
             <div styleName="header-wrapper">
-                <div styleName={classNames({ 'header-content': true, hide: !translateTo })}>
+                <div styleName={classNames({ 'header-content': true, hide: translateTo })}>
                     <div styleName="header-nav">
                         <Link to="/">
                             <img src="https://b-gold-cdn.xitu.io/v3/static/img/logo.a7995ad.svg" alt="juejin" />
@@ -118,11 +128,24 @@ export default class Header extends React.Component {
                             </ul>
                         </div>
                     </div>
-                    <div styleName="header-auth">
-                        <span styleName="login-btn" onClick={() => showAuthPopup('login')}>登录</span>
-                        <span styleName="circle">·</span>
-                        <span styleName="register-btn" onClick={() => showAuthPopup('register')}>注册</span>
-                    </div>
+                    {
+                        isLogin
+                            ? (
+                                <div styleName="header-auth">
+                                    <div styleName="notify-wrapper">
+                                        <i className="iconfont" styleName="notify">&#xe6eb;</i>
+                                    </div>
+                                    <UserMenu uid={userDetail.uid} logout={logout} />
+                                </div>
+                            )
+                            : (
+                                <div styleName="header-auth">
+                                    <span styleName="login-btn" onClick={() => showAuthPopup('login')}>登录</span>
+                                    <span styleName="circle">·</span>
+                                    <span styleName="register-btn" onClick={() => showAuthPopup('register')}>注册</span>
+                                </div>
+                            )
+                    }
                 </div>
             </div>
         )

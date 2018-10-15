@@ -7,7 +7,8 @@ export const user = {
         token: '',
         clientId: '',
         uid: '',
-        userDetail: {}
+        userDetail: {},
+        otherUserDetail: {}
     },
     reducers: {
         saveUserMessage(state, payload) {
@@ -15,6 +16,12 @@ export const user = {
                 ...state,
                 ...payload,
                 isLogin: true
+            }
+        },
+        setOtherUserDetail(state, { otherUserDetail }) {
+            return {
+                ...state,
+                otherUserDetail
             }
         }
     },
@@ -29,9 +36,6 @@ export const user = {
                     uid: data.user.uid
                 }
                 Cookies.set('userInfo', userInfo, { expires: 7, path: '/' })
-
-                this.saveUserMessage({ ...userInfo, userDetail: data.user })
-                toast.success(`欢迎 ${data.user.username}`)
             } catch (err) {
                 console.log(err)
 
@@ -55,6 +59,25 @@ export const user = {
             } catch (err) {
                 console.log(err)
             }
+        },
+        async getOtherUserDetail({ userId }, { api, user }) {
+            if (user.uid === userId) {
+                return
+            }
+
+            try {
+                const { data } = await api.getOtherUserInfo(userId)
+                this.setOtherUserDetail({
+                    otherUserDetail:
+                    data.d[userId]
+                })
+            } catch (err) {
+                console.log(err)
+            }
+        },
+        logout() {
+            Cookies.remove('userInfo')
+            window.location.reload()
         }
     }
 }

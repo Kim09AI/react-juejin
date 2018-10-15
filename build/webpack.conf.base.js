@@ -8,7 +8,8 @@ module.exports = {
         extensions: ['.jsx', '.js', '.json'],
         alias: {
             '~': r('src')
-        }
+        },
+        modules: [r('node_modules')]
     },
     module: {
         rules: [

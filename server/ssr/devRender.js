@@ -74,6 +74,7 @@ complier.watch({}, (err, stats) => {
     stats.warnings.forEach(warn => console.warn(warn))
 
     serverBundle = _require('./' + serverConfig.output.filename)
+    console.log('server bundle complie success')
 })
 
 module.exports = function devRender(req, res, next) {

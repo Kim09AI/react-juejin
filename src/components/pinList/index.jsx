@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
+import LazyLoad from 'react-lazyload'
+import ImgView from '../imgView'
 import TextView from '../textView'
 import { timeFormat } from '../../utils'
 import './style.styl'
@@ -32,6 +34,22 @@ export default function PinList(props) {
                         <div styleName="body">
                             <TextView content={item.content} />
                         </div>
+                        {
+                            item.pictures.length > 0 && (
+                                <div styleName="img-wrapper">
+                                    <LazyLoad once height="100">
+                                        <ImgView list={item.pictures} />
+                                    </LazyLoad>
+                                </div>
+                            )
+                        }
+                        {
+                            !!item.topic && (
+                                <div styleName="tag-wrapper">
+                                    <span styleName="tag">{item.topic.title}</span>
+                                </div>
+                            )
+                        }
                         <div styleName="footer">
                             <div styleName="action">
                                 <i className="iconfont">&#xe600;</i>

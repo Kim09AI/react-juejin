@@ -1,3 +1,5 @@
+import qs from 'qs'
+
 const timeFormatArr = [0, 60, 3600, 86400, 2592000, 31104000, Number.MAX_VALUE]
 const timeUnit = ['刚刚', '分钟前', '小时前', '天前', '月前', '年前']
 
@@ -20,9 +22,6 @@ export function timeFormat(dateStr) {
     time = time / timeFormatArr[index] | 0 // eslint-disable-line
     return time + timeUnit[index]
 }
-
-export const linkPattern = /(((http|https):\/\/)?([\w-]+\.)+[\w-]+(\/[\w\u4e00-\u9fa5\-./?@%!&=+~:#;,]*)?)/ig
-
 
 export const getPostId = url => {
     if (!url) return ''
@@ -49,3 +48,11 @@ export function format(fmt, date) {
     return fmt
 }
 /* eslint-enable */
+
+export const queryParse = search => {
+    if (!search) return {}
+
+    const _search = search.substr(1)
+    const query = qs.parse(_search)
+    return query
+}

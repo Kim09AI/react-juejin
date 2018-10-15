@@ -1,12 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
+import classNames from 'classnames'
 import { timeFormat } from '../../utils'
 import './style.styl'
 
 export default class CommentList extends React.Component {
     static propTypes = {
-        list: PropTypes.array.isRequired
+        list: PropTypes.array.isRequired,
+        onLikeClick: PropTypes.func.isRequired
     }
 
     componentDidMount() {}
@@ -19,12 +21,12 @@ export default class CommentList extends React.Component {
     }
 
     render() {
-        const { list } = this.props
+        const { list, onLikeClick } = this.props
 
         return (
             <ul styleName="comment-list">
                 {
-                    list.map(item => (
+                    list.map((item, index) => (
                         <li key={item.id} styleName="item">
                             <Link to={`/user/${item.userInfo.objectId}`}>
                                 <div styleName="avatar" style={{ backgroundImage: `url(${item.userInfo.avatarLarge})` }} />
@@ -40,8 +42,11 @@ export default class CommentList extends React.Component {
                                 <div styleName="other-info">
                                     <div styleName="time">{timeFormat(item.createdAt)}</div>
                                     <div styleName="action-box">
-                                        <div styleName="action-item">
-                                            <i className="iconfont">&#xe600;</i>
+                                        <div
+                                            styleName={classNames({ 'action-item': true, active: item.isLike })}
+                                            onClick={() => onLikeClick(item.id, !item.isLike, index)}
+                                        >
+                                            <i className="iconfont" styleName="like">&#xe600;</i>
                                             {!!item.likesCount && <span>{item.likesCount}</span>}
                                         </div>
                                         <div styleName="action-item">

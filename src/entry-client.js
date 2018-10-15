@@ -16,7 +16,14 @@ import './assets/styles/index.styl'
 
 // FastClick.attach(document.body)
 
+window.addEventListener('popstate', () => {
+    window.isForwardOrBack = true
+})
+
 const initialState = window.__INITIAL_STATE__ || {} // eslint-disable-line
+
+// 设置用户验证相关的信息
+api.setUserInfo(initialState.api.userInfo)
 
 const helpers = { api }
 const store = createStore(initialState)

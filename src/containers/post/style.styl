@@ -19,10 +19,11 @@
             font-size: 1.3rem
             color: #333333
             font-weight: bold
+            line-height: normal
         .info
             font-size: 1.1rem
             color: #909090
-            margin-top 8px
+            margin-top 5px
     .title
         color: #333333
         font-weight: bold
@@ -39,20 +40,6 @@
             font-size: 16px
             color: #8a9aa9
             text-align: center
-        .input-wrapper
-            margin: 1.25rem 1rem
-            padding: 1rem 1.333rem
-            border-radius: 3px
-            background-color: #fafbfc
-            .comment-input
-                width: 100%
-                padding: .6rem 1rem
-                font-size: 1.083rem
-                outline: none
-                box-sizing: border-box
-                color: #8a9aa9
-                border 1px solid #f1f1f1
-                border-radius: 3px
         .load-more
             text-align: center
             padding: 1.1rem 0
@@ -99,12 +86,13 @@
             justify-content: center
             position relative
             cursor pointer
+            color: #8a93a0
+            &.active
+                color: #6cbd45
             .text
-                color: #8a93a0
                 font-size: 13px
                 margin-left .3rem
             .praise-icon, .comment-icon, .collect-icon
-                color: #8a93a0
                 font-size: 18px
             .comment-icon
                 font-size: 20px

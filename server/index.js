@@ -21,7 +21,11 @@ app.use('/api', proxy({
         '^/api/post': '/',
         '^/api/comment': '/',
         '^/api/juejin': '/',
-        '^/api/user': '/'
+        '^/api/user': '/',
+        '^/api/like': '/',
+        '^/api/ufp': '/',
+        '^/api/gold': '/',
+        '^/api/lccro': '/'
     },
     router({ url }) {
         const prefix = url.split('/')[2]
@@ -34,7 +38,11 @@ app.use('/api', proxy({
             post: 'https://post-storage-api-ms.juejin.im/v1',
             comment: 'https://comment-wrapper-ms.juejin.im/v1',
             juejin: 'https://juejin.im',
-            user: 'https://user-storage-api-ms.juejin.im/v1'
+            user: 'https://user-storage-api-ms.juejin.im/v1',
+            like: 'https://user-like-wrapper-ms.juejin.im/v1',
+            ufp: 'https://ufp-api-ms.juejin.im/v1',
+            gold: 'https://gold-tag-ms.juejin.im/v1',
+            lccro: 'https://lccro-api-ms.juejin.im/v1'
         }
 
         return hostConfig[prefix]

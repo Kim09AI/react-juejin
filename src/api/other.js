@@ -1,4 +1,6 @@
-export default hostConfig => ({
+import { hostConfig } from './config'
+
+export default {
     // 获取开源库
     getCustomRepos(before, limit = 20) {
         return this.get(`${hostConfig.repo}/getCustomRepos`, {
@@ -20,4 +22,4 @@ export default hostConfig => ({
             }
         })
     }
-})
+}
