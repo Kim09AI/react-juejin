@@ -1,0 +1,37 @@
+.carousel-wrapper
+    position: relative
+    background-color: #ffffff
+    .arrow
+        position: absolute
+        top: 50%
+        transform: translateY(-50%)
+        color: #ffffff
+        font-size: 22px
+        &:after
+            content: ''
+            position absolute
+            top: 50%
+            left 50%
+            transform: translate(-50%, -50%)
+            padding: 30px
+    .left-arrow
+        left 10px
+    .right-arrow
+        right 10px
+    .dots
+        position: absolute
+        left 0
+        right 0
+        bottom: 20px
+        text-align: center
+        .dot-item
+            display: inline-block
+            width: 8px
+            height 8px
+            border: 1px solid #fff
+            border-radius: 50%
+            margin: 0 2px
+            &.active
+                background-color: #007fff
+                border-color: #007fff
+

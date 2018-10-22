@@ -3,6 +3,7 @@ const path = require('path')
 const Loadable = require('react-loadable')
 const proxy = require('http-proxy-middleware')
 const cookieParser = require('cookie-parser')
+const config = require('./config')
 
 const app = express()
 
@@ -10,44 +11,8 @@ const isDev = process.env.NODE_ENV === 'development'
 
 app.use(cookieParser())
 
-app.use('/api', proxy({
-    target: 'https://juejin.im',
-    changeOrigin: true,
-    pathRewrite: {
-        '^/api/timeline': '/',
-        '^/api/xiaoce': '/',
-        '^/api/repo': '/',
-        '^/api/shortMsg': '/',
-        '^/api/post': '/',
-        '^/api/comment': '/',
-        '^/api/juejin': '/',
-        '^/api/user': '/',
-        '^/api/like': '/',
-        '^/api/ufp': '/',
-        '^/api/gold': '/',
-        '^/api/lccro': '/'
-    },
-    router({ url }) {
-        const prefix = url.split('/')[2]
-
-        const hostConfig = {
-            timeline: 'https://timeline-merger-ms.juejin.im/v1',
-            xiaoce: 'https://xiaoce-timeline-api-ms.juejin.im/v1',
-            repo: 'https://repo-ms.juejin.im/v1',
-            shortMsg: 'https://short-msg-ms.juejin.im/v1',
-            post: 'https://post-storage-api-ms.juejin.im/v1',
-            comment: 'https://comment-wrapper-ms.juejin.im/v1',
-            juejin: 'https://juejin.im',
-            user: 'https://user-storage-api-ms.juejin.im/v1',
-            like: 'https://user-like-wrapper-ms.juejin.im/v1',
-            ufp: 'https://ufp-api-ms.juejin.im/v1',
-            gold: 'https://gold-tag-ms.juejin.im/v1',
-            lccro: 'https://lccro-api-ms.juejin.im/v1'
-        }
-
-        return hostConfig[prefix]
-    }
-}))
+// 代理掘金数据接口
+app.use('/api', proxy(config.proxyOptions))
 
 if (isDev) {
     app.use(express.static(path.resolve(__dirname, '../public')))
@@ -78,7 +43,7 @@ app.use((err, req, res, next) => {
     const status = err.status || 500
     if (isDev) {
         console.log(err)
-        res.status(status).send(err)
+        res.status(status).send(err.message)
     } else {
         res.status(status).send('发生未知错误，请稍后重试')
     }

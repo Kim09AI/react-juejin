@@ -1,5 +1,6 @@
 import Cookies from 'js-cookie'
 import { toast } from 'react-toastify'
+import produce from 'immer'
 
 export const user = {
     state: {
@@ -23,7 +24,10 @@ export const user = {
                 ...state,
                 otherUserDetail
             }
-        }
+        },
+        setUserFollowed: produce((state, { isFollow }) => {
+            state.otherUserDetail.isFollow = isFollow
+        })
     },
     effects: {
         async loginByPhoneNumber({ phoneNumber, password } = {}, { api }) {
@@ -55,21 +59,26 @@ export const user = {
         async syncUserDetailForSSR({ token, clientId, uid } = {}, { api }) {
             try {
                 const { data } = await api.getUserInfo(uid)
-                this.saveUserMessage({ token, clientId, uid, userDetail: data.d })
+                this.saveUserMessage({
+                    token,
+                    clientId,
+                    uid,
+                    userDetail: data.d
+                })
             } catch (err) {
                 console.log(err)
             }
         },
-        async getOtherUserDetail({ userId }, { api, user }) {
-            if (user.uid === userId) {
+        async getUserDetailById({ userId }, { api, user }) {
+            if (userId === user.uid || userId === user.otherUserDetail.objectId) {
                 return
             }
 
             try {
-                const { data } = await api.getOtherUserInfo(userId)
+                const { data } = await api.getUserInfoByIds(userId)
+
                 this.setOtherUserDetail({
-                    otherUserDetail:
-                    data.d[userId]
+                    otherUserDetail: data.d[userId] || {}
                 })
             } catch (err) {
                 console.log(err)
@@ -78,6 +87,30 @@ export const user = {
         logout() {
             Cookies.remove('userInfo')
             window.location.reload()
+        },
+        async checkCurrentUserFollow({ currentUid, targetUids } = {}, { api }) {
+            try {
+                const { data } = await api.checkCurrentUserFollow(currentUid, targetUids)
+
+                if (data.d[targetUids] === true) {
+                    this.setUserFollowed({ isFollow: true })
+                }
+            } catch (err) {
+                console.log(err)
+            }
+        },
+        async toggleUserFollow({ targetUid } = {}, { api, user }) {
+            const { uid, otherUserDetail: { isFollow } } = user
+
+            try {
+                const { data } = await api[isFollow ? 'currentUserUnFollow' : 'currentUserFollow'](targetUid, uid)
+                if (data.m === 'ok') {
+                    this.setUserFollowed({ isFollow: !isFollow })
+                }
+            } catch (err) {
+                console.log(err)
+                toast.error('未知错误，可能已取消关注成功，尝试刷新页面确认')
+            }
         }
     }
 }

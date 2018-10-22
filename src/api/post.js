@@ -45,10 +45,7 @@ export default {
                 pageSize
             },
             headers: {
-                'X-Juejin-Src': 'web',
-                'X-Juejin-Client': '',
-                'X-Juejin-Token': '',
-                'X-Juejin-Uid': '',
+                'X-Juejin-Src': 'web'
             }
         })
     },
@@ -138,6 +135,33 @@ export default {
                 'X-Juejin-Client': clientId,
                 'X-Juejin-Token': token,
                 'X-Juejin-Uid': uid
+            }
+        })
+    },
+
+    // 获取用户专栏
+    getEntryByUser({ targetUid, before, type = 'post', limit = 20, order = 'createdAt' } = {}) {
+        return this.get(`${hostConfig.timeline}/get_entry_by_self`, {
+            params: {
+                src: 'web',
+                order,
+                limit,
+                type,
+                targetUid,
+                before
+            }
+        })
+    },
+
+    // 获取用户赞的文章
+    getUserLikeEntry(targetUid, page, pageSize = 20) {
+        return this.get(`${hostConfig.like}/user/${targetUid}/like/entry`, {
+            params: {
+                page,
+                pageSize
+            },
+            headers: {
+                'X-Juejin-Src': 'web'
             }
         })
     }

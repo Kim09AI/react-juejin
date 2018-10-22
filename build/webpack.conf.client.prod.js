@@ -7,6 +7,7 @@ const UglifyjsWebpackPlugin = require('uglifyjs-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const ReactLoadablePlugin = require('react-loadable/webpack').ReactLoadablePlugin
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
+const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
 const hash = require('hash-sum')
 const base = require('./webpack.conf.base')
 const config = require('./config')
@@ -63,7 +64,11 @@ const cssLoaders = (modulesCss) => {
         {
             loader: 'stylus-loader',
             options: {
-                sourceMap: true
+                sourceMap: true,
+                import: [
+                    r('src/assets/styles/mixin.styl'),
+                    r('src/assets/styles/variable.styl')
+                ]
             }
         }
     ]
@@ -205,6 +210,35 @@ module.exports = merge(base, {
             } else {
                 return modules[0].id
             }
+        }),
+        new SWPrecacheWebpackPlugin({
+            dontCacheBustUrlsMatching: /\.\w{8}\./,
+            filename: 'service-worker.js',
+            minify: true,
+            navigateFallback: '/',
+            navigateFallbackWhitelist: [/^(?!\/__).*/],
+            staticFileGlobsIgnorePatterns: [
+                /\.map$/,
+                /server\.ejs/,
+                /asyncCommonCss\.json/,
+                /react-loadable\.json/,
+                /page/
+            ],
+            stripPrefix: 'dist',
+            staticFileGlobs: [
+                'dist/' + require('./dll/bundle-conf').base.js
+            ],
+            mergeStaticsConfig: true,
+            runtimeCaching: [
+                {
+                    urlPattern: /static\/(css|js)\/page/,
+                    handler: 'cacheFirst'
+                },
+                {
+                    urlPattern: /\/.*/,
+                    handler: 'networkFirst'
+                }
+            ]
         })
     ]
 })

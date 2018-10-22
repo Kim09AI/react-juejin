@@ -5,10 +5,12 @@ import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
 import classNames from 'classnames'
 import qs from 'qs'
+import { last } from 'lodash-es'
 
 import CommentList from '../../components/commentList'
 import EntryList from '../../components/entryList'
 import Pullup from '../../components/pullup'
+import EmptyContentTip from '../../components/emptyContentTip'
 import CommentInput from '../../components/commentInput'
 import { format } from '../../utils'
 import { scrollToElement } from '../../utils/dom'
@@ -19,7 +21,8 @@ const mapState = ({ post, loading }) => ({
     content: post.content,
     commentList: post.commentList,
     loadingComment: loading.effects.post.getComment,
-    recommendEntry: post.recommendEntry
+    recommendEntry: post.recommendEntry,
+    tagIds: post.tagIds
 })
 
 const mapDispatch = ({ post }) => ({
@@ -44,10 +47,23 @@ export default class Post extends React.Component {
         togglePostLike: PropTypes.func.isRequired,
         checkPostLike: PropTypes.func.isRequired,
         toggleRecommendEntryLike: PropTypes.func.isRequired,
-        toggleCommentLike: PropTypes.func.isRequired
+        toggleCommentLike: PropTypes.func.isRequired,
+        tagIds: PropTypes.string.isRequired
     }
 
     componentDidMount() {
+        this.init()
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('scroll', this.lazyLoadRecommend)
+    }
+
+    init() {
+        if (Object.keys(this.props.info).length === 0) {
+            return
+        }
+
         const isLoadingRecommend = this.initCheckLoadRecommend()
         !isLoadingRecommend && window.addEventListener('scroll', this.lazyLoadRecommend)
 
@@ -60,10 +76,6 @@ export default class Post extends React.Component {
         }
     }
 
-    componentWillUnmount() {
-        window.removeEventListener('scroll', this.lazyLoadRecommend)
-    }
-
     commentSubmit = (value) => {
         console.log(value)
     }
@@ -72,10 +84,10 @@ export default class Post extends React.Component {
         return tags && tags.map(item => item.id).join('|')
     }
 
-    getRecommendEntry = () => {
+    getRecommendEntry = (more = false) => {
         const { info, recommendEntry } = this.props
         const tagIds = this.getTagIds(info.tags)
-        const before = recommendEntry[recommendEntry.length - 1] && recommendEntry[recommendEntry.length - 1].rankIndex
+        const before = more ? (last(recommendEntry) || {}).rankIndex : undefined
 
         return this.props.getRecommendEntryByTagIds({ tagIds, before })
     }
@@ -161,7 +173,11 @@ export default class Post extends React.Component {
     }
 
     render() {
-        const { info, content, commentList, loadingComment, recommendEntry } = this.props
+        const { info, content, commentList, loadingComment, recommendEntry, tagIds } = this.props
+
+        if (Object.keys(info).length === 0) {
+            return <EmptyContentTip tip="找不到该文章或该文章非掘金站内文章" />
+        }
 
         return (
             <div style={{ marginBottom: '50px' }}>
@@ -197,11 +213,11 @@ export default class Post extends React.Component {
                     </div>
                 </div>
                 {
-                    recommendEntry.length > 0 && (
+                    tagIds === this.getTagIds(info.tags) && recommendEntry.length > 0 && (
                         <div styleName="recommend-wrapper">
                             <div styleName="recommend-title">相关推荐</div>
                             <EntryList entryList={recommendEntry} onApproveClick={this._toggleRecommentPostLike} />
-                            <Pullup loader={this.getRecommendEntry} />
+                            <Pullup loader={() => this.getRecommendEntry(true)} />
                         </div>
                     )
                 }

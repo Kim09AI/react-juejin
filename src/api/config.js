@@ -11,5 +11,7 @@ export const hostConfig = {
     like: '/like',
     ufp: '/ufp',
     gold: '/gold',
-    lccro: '/lccro'
+    lccro: '/lccro',
+    follow: '/follow',
+    event: '/event'
 }

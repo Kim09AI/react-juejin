@@ -15,7 +15,8 @@ export default class TabList extends React.Component {
         tabList: PropTypes.array.isRequired,
         getLink: PropTypes.func.isRequired,
         translateTo: PropTypes.bool.isRequired,
-        syncFixedTop: PropTypes.func
+        syncFixedTop: PropTypes.func,
+        selectedIndex: PropTypes.number.isRequired
     }
 
     state = {
@@ -23,10 +24,7 @@ export default class TabList extends React.Component {
     }
 
     componentDidMount() {
-        const { top } = $(this.tabListWrapper).offset()
-        this.top = top
-        // 通知调用者，本组件fixed的临界值
-        this.props.syncFixedTop(top)
+        this._syncFixedTop()
 
         window.addEventListener('scroll', this.scrollToFixed)
     }
@@ -49,23 +47,32 @@ export default class TabList extends React.Component {
         }
     }
 
+    _syncFixedTop() {
+        setTimeout(() => {
+            const { top } = $(this.tabListWrapper).offset()
+            this.top = top
+            // 通知调用者，本组件fixed的临界值
+            this.props.syncFixedTop(top)
+        }, 20)
+    }
+
     render() {
-        const { tabList, getLink, translateTo } = this.props
+        const { tabList, getLink, translateTo, selectedIndex } = this.props
         const { fixed } = this.state
 
         return (
             <div styleName="tab-list-wrapper" ref={tabListWrapper => { this.tabListWrapper = tabListWrapper }}>
-                <div styleName={classNames({ 'tab-list': true, fixed, translate: fixed && translateTo })}>
+                <div styleName={classNames({ 'tab-list': true, fixed, translate: fixed && !translateTo })}>
                     {
                         tabList.map((item, index) => (
                             <Link
                                 to={getLink(item, index)}
                                 key={item.name}
-                                styleName="item"
+                                styleName={classNames({ item: true, active: selectedIndex === index })}
                             >
                                 <div styleName="text">{item.name}</div>
                                 {
-                                    !!item.count && <div styleName="count">{item.count}</div>
+                                    item.count !== undefined && <div styleName="count">{item.count}</div>
                                 }
                             </Link>
                         ))

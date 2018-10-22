@@ -2,6 +2,8 @@ import Loadable from 'react-loadable'
 import { deferredAsyncConnect } from '../utils/deferredAsyncConnect'
 import { queryParse } from '../utils'
 
+import NotMatch from '../containers/notMatch'
+
 const Loading = () => null
 
 const Home = Loadable({
@@ -24,18 +26,43 @@ const Pins = Loadable({
     loading: Loading
 })
 
+const Events = Loadable({
+    loader: () => import(/* webpackChunkName: 'page-events' */ '../containers/events'),
+    loading: Loading
+})
+
 const Post = Loadable({
     loader: () => import(/* webpackChunkName: 'page-post' */ '../containers/post'),
     loading: Loading
 })
 
-const Setting = Loadable({
-    loader: () => import(/* webpackChunkName: 'page-setting' */ '../containers/setting'),
+const User = Loadable({
+    loader: () => import(/* webpackChunkName: 'page-user' */ '../containers/user'),
     loading: Loading
 })
 
-const User = Loadable({
-    loader: () => import(/* webpackChunkName: 'page-user' */ '../containers/user'),
+const Activities = Loadable({
+    loader: () => import(/* webpackChunkName: 'page-activities' */ '../containers/activities'),
+    loading: Loading
+})
+
+const UserPosts = Loadable({
+    loader: () => import(/* webpackChunkName: 'page-userPosts' */ '../containers/userPosts'),
+    loading: Loading
+})
+
+const UserPins = Loadable({
+    loader: () => import(/* webpackChunkName: 'page-userPins' */ '../containers/userPins'),
+    loading: Loading
+})
+
+const UserLikes = Loadable({
+    loader: () => import(/* webpackChunkName: 'page-userLikes' */ '../containers/userLikes'),
+    loading: Loading
+})
+
+const UserTags = Loadable({
+    loader: () => import(/* webpackChunkName: 'page-userTags' */ '../containers/userTags'),
     loading: Loading
 })
 
@@ -74,11 +101,29 @@ export default {
     Pins: deferredAsyncConnect(Pins)({
         promise: ({ store }) => store.dispatch.pins.getPinList()
     }),
+    Events: deferredAsyncConnect(Events)({
+        promise: ({ store }) => store.dispatch.events.getEventList({ pageNum: 1 })
+    }),
     Post: deferredAsyncConnect(Post)({
         promise: ({ store, match: { params } }) => store.dispatch.post.getDetail(params.postId)
     }),
-    Setting,
     User: deferredAsyncConnect(User)({
-        promise: ({ store, match: { params } }) => store.dispatch.user.getOtherUserDetail({ userId: params.id })
-    })
+        promise: ({ store, match: { params } }) => store.dispatch.user.getUserDetailById({ userId: params.id })
+    }),
+    Activities: deferredAsyncConnect(Activities)({
+        promise: ({ store, match: { params } }) => store.dispatch.activities.getUserActivities({ targetUid: params.id })
+    }),
+    UserPosts: deferredAsyncConnect(UserPosts)({
+        promise: ({ store, match: { params } }) => store.dispatch.userPosts.getUserPosts({ targetUid: params.id })
+    }),
+    UserPins: deferredAsyncConnect(UserPins)({
+        promise: ({ store, match: { params } }) => store.dispatch.userPins.getUserPinList({ targetUid: params.id })
+    }),
+    UserLikes: deferredAsyncConnect(UserLikes)({
+        promise: ({ store, match: { params } }) => store.dispatch.userLikes.getUserLikeEntry({ targetUid: params.id })
+    }),
+    UserTags: deferredAsyncConnect(UserTags)({
+        promise: ({ store, match: { params } }) => store.dispatch.userTags.getUserSubscribeTags({ targetUid: params.id })
+    }),
+    NotMatch
 }

@@ -1,13 +1,15 @@
 .user-pannel-wrapper
     padding: 2.5rem
-    display: flex
-    justify-content: center
-    text-align: center
     background-color: #ffffff
+    text-align: center
     .avatar
         width: 7.5rem
+        height 7.5rem
         border-radius: 50%
         background-color: #f9f9f9
+        background-size: cover
+        background-position: center
+        display: inline-block
     .info-box
         margin: 1rem 0
         .name
@@ -16,7 +18,31 @@
             color: #000000
             font-weight: bold
             text-align: left
+            display: inline-block
         .pos
             line-height: 1.5
             font-size: 1.25rem
             color: #72777b
+            margin-top 1rem
+            .split
+                display: inline-block
+                height: 10px
+                border-left: 1px solid #72777b
+                margin: 0 7px
+        .desc
+            color: #72777b
+            font-size: 1.25rem
+            line-height: 1.5
+            margin-top .4rem
+    .follow-btn
+        color: #92c452
+        border: 1px solid #92c452
+        border-radius: 4px
+        width: 9rem
+        display: inline-block
+        font-size: 1.333rem
+        padding: 9px 0
+        background-color: #ffffff
+        &.active
+            color: #ffffff
+            background-color: #92c452

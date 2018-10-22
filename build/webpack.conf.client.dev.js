@@ -56,7 +56,11 @@ const cssLoaders = (modulesCss) => {
         {
             loader: 'stylus-loader',
             options: {
-                sourceMap: true
+                sourceMap: true,
+                import: [
+                    r('src/assets/styles/mixin.styl'),
+                    r('src/assets/styles/variable.styl')
+                ]
             }
         }
     ]

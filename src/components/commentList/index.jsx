@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import classNames from 'classnames'
-import { timeFormat } from '../../utils'
+import { timeFormat, getComposeText } from '../../utils'
 import './style.styl'
 
 export default class CommentList extends React.Component {
@@ -12,13 +12,6 @@ export default class CommentList extends React.Component {
     }
 
     componentDidMount() {}
-
-    getComposeText(str, ...args) {
-        return args.reduce((res, item) => {
-            item && res.push(item)
-            return res
-        }, []).join(str)
-    }
 
     render() {
         const { list, onLikeClick } = this.props
@@ -35,7 +28,7 @@ export default class CommentList extends React.Component {
                                 <div styleName="info">
                                     <Link to={`/user/${item.userInfo.objectId}`} styleName="username">{item.userInfo.username}</Link>
                                     <span styleName="position">
-                                        {this.getComposeText(' @ ', item.userInfo.jobTitle, item.userInfo.company)}
+                                        {getComposeText(' @ ', item.userInfo.jobTitle, item.userInfo.company)}
                                     </span>
                                 </div>
                                 <div styleName="comment">{item.content}</div>

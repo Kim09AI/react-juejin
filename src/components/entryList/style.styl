@@ -1,5 +1,3 @@
-@import '../../assets/styles/variable.styl'
-
 .entry-list-wrapper
     background-color: $color-background
     .item
@@ -8,6 +6,9 @@
         .info-wrapper
             font-size: 1rem
             color: $color-text
+            white-space: nowrap
+            overflow: hidden
+            text-overflow: ellipsis
             .hot
                 color: $color-hot
             .post
@@ -20,7 +21,7 @@
             text-overflow ellipsis
             overflow hidden
             .title
-                font-size: 1.2rem
+                media(1.2rem)
                 color: #2e3135
                 font-weight: bold
                 line-height: normal

@@ -9,16 +9,13 @@ import Loadable from 'react-loadable'
 import { ReduxAsyncConnect } from 'redux-connect'
 // import FastClick from 'fastclick'
 
+import registerServiceWorker from './registerServiceWorker'
 import createStore from './store'
 import routesConfig from './routes'
 import api from './api'
 import './assets/styles/index.styl'
 
 // FastClick.attach(document.body)
-
-window.addEventListener('popstate', () => {
-    window.isForwardOrBack = true
-})
 
 const initialState = window.__INITIAL_STATE__ || {} // eslint-disable-line
 
@@ -46,11 +43,9 @@ const renderApp = (routes) => {
 // eslint-disable-next-line
 ;(async () => {
     // 预加载当前页面匹配的页面组件，当本页面需要的js加载好之后，再进行hydrate
-    // 否则服务端和客户端的渲染结果会不匹配导致报错
-    if (process.env.NODE_ENV === 'development') {
-        const matches = matchRoutes(routesConfig, window.location.pathname)
-        await Promise.all(matches.map(matched => matched.route.component && matched.route.component.preload && matched.route.component.preload()))
-    }
+    // 否则服务端和客户端的渲染结果会不一致导致报错
+    const matches = matchRoutes(routesConfig, window.location.pathname)
+    await Promise.all(matches.map(matched => matched.route.component && matched.route.component.preload && matched.route.component.preload()))
 
     Loadable.preloadReady().then(() => renderApp(routesConfig))
 })()
@@ -64,3 +59,5 @@ if (module.hot) {
         })
     })
 }
+
+registerServiceWorker()

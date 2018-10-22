@@ -1,0 +1,65 @@
+.user-post-list
+    background-color: #ffffff
+    .item
+        border-bottom: 1px solid hsla(240,2%,90%,.5)
+        padding: 2.5rem
+        display: flex
+        flex-direction: column
+        .header
+            display: flex
+            align-items: center
+            .avatar
+                background-color: #f9f9f9
+                border-radius: 50%
+                width: 2.5rem
+                height: 2.5rem
+                margin-right: 1rem
+                background-size: cover
+                background-repeat: no-repeat
+                background-position: center
+            .username, .time
+                font-size: 1.16rem
+                color: #8b8b8b
+            .circle
+                margin: 0 .5rem
+                color: #8b8b8b
+        .title
+            font-size: 2rem
+            color: #000000
+            font-weight: bold
+            line-height: 1.3
+            margin-top 1.2rem
+        .sub-content
+            color: #8b8b8b
+            font-size: 1.3rem
+            line-height: 1.5
+            letter-spacing: 0.02rem
+            margin-top 0.8rem
+            max-height: 7.800000000000001rem
+            overflow hidden
+        .footer
+            display: flex
+            justify-content: space-between
+            align-items: center
+            margin-top 1.5rem
+            .action-wrapper
+                display: inline-flex
+                .action-item
+                    border: 1px solid #edeeef
+                    padding: 0 .8rem
+                    height: 1.5rem
+                    display: flex
+                    align-items: center
+                    font-size: 1rem
+                    color: $color-text
+                    &.active
+                        color: #6cbd45
+                    .text
+                        font-weight: bold
+                        margin-left: 3px
+                        color: $color-text
+                    .approve, .comment
+                        font-size: 1.2rem
+            .read-post-action
+                color: rgba(24,37,50,.3)
+                font-size: 12px

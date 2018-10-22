@@ -29,11 +29,7 @@ function isModulesMatch() {
     const _versions = JSON.stringify(versions)
     const _oldVersions = JSON.stringify(oldVersions)
 
-    if (_versions !== _oldVersions) {
-        return false
-    }
-
-    return true
+    return _versions === _oldVersions
 }
 
 function buildDll() {

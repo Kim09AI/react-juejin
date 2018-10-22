@@ -61,17 +61,13 @@ export default class UserMenu extends React.Component {
                                 <span styleName="menu-text">我赞过的</span>
                             </Link>
                         </li>
-                        <li>
-                            <Link to={`/user/${uid}/collections`} styleName="item">
-                                <i className="iconfont" styleName="collect">&#xe632;</i>
-                                <span styleName="menu-text">我的收藏集</span>
-                            </Link>
+                        <li styleName="item">
+                            <i className="iconfont" styleName="collect">&#xe632;</i>
+                            <span styleName="menu-text">我的收藏集</span>
                         </li>
-                        <li>
-                            <Link to={`/user/${uid}/books?type=bought`} styleName="item">
-                                <i className="iconfont" styleName="shop">&#xe68d;</i>
-                                <span styleName="menu-text">已购</span>
-                            </Link>
+                        <li styleName="item">
+                            <i className="iconfont" styleName="shop">&#xe68d;</i>
+                            <span styleName="menu-text">已购</span>
                         </li>
                         <li>
                             <Link to="/subscribe" styleName="item">
@@ -81,11 +77,9 @@ export default class UserMenu extends React.Component {
                         </li>
                     </div>
                     <div styleName="item-group">
-                        <li>
-                            <Link to="/user/setting" styleName="item">
-                                <i className="iconfont" styleName="setting">&#xe609;</i>
-                                <span styleName="menu-text">设置</span>
-                            </Link>
+                        <li styleName="item">
+                            <i className="iconfont" styleName="setting">&#xe609;</i>
+                            <span styleName="menu-text">设置</span>
                         </li>
                         <li styleName="item">
                             <i className="iconfont">&#xe61e;</i>

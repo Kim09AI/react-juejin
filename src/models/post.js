@@ -3,6 +3,8 @@ import produce from 'immer'
 
 export const post = {
     state: {
+        postId: '',
+        tagIds: '',
         info: {}, // 文章详细信息
         content: {}, // 文章全文等
         commentList: [],
@@ -10,11 +12,12 @@ export const post = {
         recommendEntry: []
     },
     reducers: {
-        setDetail(state, { info, content }) {
+        setDetail(state, { info, content, postId }) {
             return {
                 ...state,
                 info,
-                content
+                content,
+                postId
             }
         },
         setComment(state, { commentList, more, commentCount }) {
@@ -24,10 +27,11 @@ export const post = {
                 commentCount
             }
         },
-        setRecommendEntry(state, { recommendEntry, more }) {
+        setRecommendEntry(state, { recommendEntry, more, tagIds }) {
             return {
                 ...state,
-                recommendEntry: more ? uniqBy(state.recommendEntry.concat(recommendEntry), item => item.objectId) : recommendEntry
+                recommendEntry: more ? uniqBy(state.recommendEntry.concat(recommendEntry), item => item.objectId) : recommendEntry,
+                tagIds
             }
         },
         updatePostLike: produce((state, { isApprove }) => {
@@ -49,7 +53,11 @@ export const post = {
         })
     },
     effects: {
-        async getDetail(postId, { api }) {
+        async getDetail(postId, { api, post }) {
+            if (postId === post.postId && Object.keys(post.info).length > 0) {
+                return
+            }
+
             try {
                 const [{ data: infoData }, { data: contentData }] = await Promise.all([
                     api.getPostDetail(postId, 'entry'),
@@ -59,7 +67,8 @@ export const post = {
                 // 保存文章详情，没有数据时设置为默认值
                 this.setDetail({
                     info: Object.keys(infoData.d).length > 0 ? infoData.d : {},
-                    content: Object.keys(contentData.d).length > 0 ? contentData.d : {}
+                    content: Object.keys(contentData.d).length > 0 ? contentData.d : {},
+                    postId
                 })
 
                 await this.getComment({ pageSize: 6, postId: infoData.d.objectId })
@@ -79,13 +88,22 @@ export const post = {
                 console.log(err)
             }
         },
-        async getRecommendEntryByTagIds({ tagIds, before }, { api, post: { recommendEntry } }) {
+        async getRecommendEntryByTagIds({ tagIds, before }, { api, post }) {
+            // 如果tagIds和上次的一样，before不为空且recommendEntry不是空数组，说明是获取下一页
+            const more = tagIds === post.tagIds && !!before && !!post.recommendEntry.length
+
+            // 不是获取下一页并且tagIds和上次获取的tagIds相等
+            if (!more && tagIds === post.tagIds) {
+                return
+            }
+
             try {
                 const { data } = await api.getRecommendEntryByTagIds(tagIds, before)
 
                 this.setRecommendEntry({
-                    more: !!before && !!recommendEntry.length,
-                    recommendEntry: data.d.entrylist
+                    more,
+                    recommendEntry: data.d.entrylist,
+                    tagIds
                 })
             } catch (err) {
                 console.log(err)

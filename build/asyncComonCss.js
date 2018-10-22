@@ -47,8 +47,10 @@ fs.readdir(dir, (err, files) => {
     const res = {}
     baseCss.forEach(file => {
         const name = file.split('.').shift()
+        const pattern = new RegExp(`(^${name}|~${name})[\.~]`) // eslint-disable-line
+
         commonCss.forEach(commonFile => {
-            if (commonFile.includes(name)) {
+            if (pattern.test(commonFile)) {
                 res[file] || (res[file] = [])
                 res[file].push(prefixPath + commonFile)
             }

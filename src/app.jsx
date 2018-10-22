@@ -8,6 +8,7 @@ import ProgressBar from './components/progressBar'
 import Header from './components/header'
 import AuthPopup from './components/authPopup'
 import ScrollRestoration from './components/scrollRestoration'
+import ErrorBoundary from './components/errorBoundary'
 
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -59,6 +60,7 @@ export default class App extends React.Component {
             <div>
                 <Helmet>
                     <title>掘金 - juejin.im - 一个帮助开发者成长的社区</title>
+                    <meta name="description" content="react-juejin - 高仿掘金服务端渲染项目" />
                 </Helmet>
                 <ProgressBar />
                 <ToastContainer
@@ -77,7 +79,9 @@ export default class App extends React.Component {
                 {showHeader ? <Header boundaryTop={800} /> : null}
                 {!isLogin && <AuthPopup />}
                 <ScrollRestoration />
-                {renderRoutes(route.routes)}
+                <ErrorBoundary>
+                    {renderRoutes(route.routes)}
+                </ErrorBoundary>
             </div>
         )
     }

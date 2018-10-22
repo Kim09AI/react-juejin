@@ -45,6 +45,7 @@
         "no-shadow": [0],
         "no-unused-vars": [1],
         "react/jsx-one-expression-per-line": [0],
-        "react/sort-comp": [0]
+        "react/sort-comp": [0],
+        "jsx-a11y/anchor-has-content": [0]
     }
 }

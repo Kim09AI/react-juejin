@@ -24,7 +24,7 @@ module.exports = {
                 loader: 'url-loader',
                 options: {
                     limit: 10000,
-                    name: 'static/img/[name].[hash:7].[ext]'
+                    name: 'static/img/[name].[hash:8].[ext]'
                 }
             },
             {
@@ -32,7 +32,7 @@ module.exports = {
                 loader: 'url-loader',
                 options: {
                     limit: 10000,
-                    name: 'static/media/[name].[hash:7].[ext]'
+                    name: 'static/media/[name].[hash:8].[ext]'
                 }
             },
             {
@@ -40,7 +40,7 @@ module.exports = {
                 loader: 'url-loader',
                 options: {
                     limit: 10000,
-                    name: 'static/fonts/[name].[hash:7].[ext]'
+                    name: 'static/fonts/[name].[hash:8].[ext]'
                 }
             }
         ]

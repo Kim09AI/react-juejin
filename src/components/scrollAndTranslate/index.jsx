@@ -26,12 +26,13 @@ export default Component => class extends React.Component {
         const top = $(window).scrollTop()
         const prevTop = this.prevTop !== undefined ? this.prevTop : top
 
-        // 往上滚动超过临界点，即满足位移的条件
+        // 上拉页面超过临界点，即满足位移的条件
         if (top > prevTop && top > this.props.boundaryTop) {
             this.state.translateTo === false && this.setState({
                 translateTo: true
             })
         } else if (top < prevTop) {
+            // 下拉页面
             this.state.translateTo === true && this.setState({
                 translateTo: false
             })

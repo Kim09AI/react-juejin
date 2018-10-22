@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { substr } from '../../utils'
 import './style.styl'
 
 const linkPattern = /(((http|https):\/\/)([\w-]+\.)+[\w-]+(\/[\w\u4e00-\u9fa5\-./?@%!&=+~:#;,]*)?)/ig
@@ -49,7 +50,7 @@ export default class TextView extends React.Component {
 
     getSubContent(includeLink, linkData, originContent, subLen) {
         if (!includeLink) {
-            return originContent.substr(0, subLen)
+            return substr(originContent, 0, subLen)
         }
 
         const { content, pos } = linkData
@@ -65,7 +66,7 @@ export default class TextView extends React.Component {
             return false
         })
 
-        return content.substr(0, newSubLen)
+        return substr(content, 0, newSubLen)
     }
 
     getLinkContent(content) {

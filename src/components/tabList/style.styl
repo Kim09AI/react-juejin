@@ -5,24 +5,31 @@
         overflow-y: hidden
         overflow-x: scroll
         background-color: #ffffff
+        display: flex
+        box-shadow: inset 0 -1px 0 hsla(240,2%,90%,.5)
         &.fixed
             position: fixed
-            top: 61px
-            left 0
-            right 0
+            top: 0
+            max-width $max-width
+            width: 100%
+            box-sizing: border-box
             z-index: 998
             transition: all 0.3s
         &.translate
-            transform: translateY(-61px)
+            transform: translateY(61px)
         .item
-            width: 90px
+            flex: 0 0 90px
             height: 100%
             display: flex
             align-items: center
             justify-content: center
+            line-height: 1.2
             &.active
                 box-shadow: inset 0 -2px 0 #3780f7
-                color: #3780f7
+                .text
+                    color: #3780f7
+                .count
+                    color: #3780f7
             .text
                 color: #31445b
                 font-size: 1.333rem

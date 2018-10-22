@@ -33,7 +33,7 @@ class Service {
     }
 
     get(url, config = {}) {
-        const params = Object.assign({}, config.params, this.userInfo)
+        const params = Object.assign({}, this.userInfo, config.params)
 
         return instance.get(url, {
             ...config,
@@ -42,19 +42,19 @@ class Service {
     }
 
     post(url, data, config = {}) {
-        const _data = Object.assign({}, data, this.userInfo)
+        const _data = Object.assign({}, this.userInfo, data)
 
         return instance.post(url, qs.stringify(_data), config)
     }
 
     put(url, data, config = {}) {
-        const _data = Object.assign({}, data, this.userInfo)
+        const _data = Object.assign({}, this.userInfo, data)
 
         return instance.put(url, qs.stringify(_data), config)
     }
 
     delete(url, config = {}) {
-        const params = Object.assign({}, config.params, this.userInfo)
+        const params = Object.assign({}, this.userInfo, config.params)
 
         return instance.delete(url, {
             ...config,

@@ -36,7 +36,7 @@ export default class Pins extends React.Component {
         const { pinList } = this.props
 
         return (
-            <div>
+            <div styleName="pins-wrapper">
                 <Helmet>
                     <title>沸点 - 掘金</title>
                 </Helmet>

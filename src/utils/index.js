@@ -56,3 +56,31 @@ export const queryParse = search => {
     const query = qs.parse(_search)
     return query
 }
+
+/**
+ * 以str对多个字符串拼接
+ * @param {string} str 拼接的表达式
+ * @param {...string} args 拼接的n个字符串
+ */
+export const getComposeText = (str, ...args) => {
+    const strs = args.reduce((res, item) => {
+        item && res.push(item)
+        return res
+    }, [])
+
+    return strs.join(str)
+}
+
+/**
+ * 截取字符串，可以正确截取占4个字节的字符，不会乱码
+ */
+const maxCode = parseInt('0xFFFF', 16) // eslint-disable-line
+export const substr = (str, start = 0, len = str.length) => {
+    const code = str.codePointAt(len - 1)
+
+    if (code > maxCode) {
+        len += 1 // eslint-disable-line
+    }
+
+    return str.substr(start, len)
+}

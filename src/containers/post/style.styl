@@ -30,6 +30,7 @@
         font-size: 2rem
         padding: .67em 0
         line-height: 1.5
+        word-break: break-all
     .markdown
         word-break: break-all
         img
@@ -66,8 +67,9 @@
         border-bottom: 1px solid #ebebeb
         display: flex
         position: fixed
-        left 0
-        right 0
+        max-width $max-width
+        width: 100%
+        box-sizing: border-box
         bottom: 0
         z-index: 99
         .action-item + .action-item
