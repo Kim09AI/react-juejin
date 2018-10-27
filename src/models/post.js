@@ -73,7 +73,18 @@ export const post = {
 
                 await this.getComment({ pageSize: 6, postId: infoData.d.objectId })
             } catch (err) {
-                console.log(err)
+                // 可能不是掘金站内文章
+                this.setDetail({
+                    info: {},
+                    content: {},
+                    postId
+                })
+
+                this.setComment({
+                    commentList: [],
+                    commentCount: 0,
+                    more: false
+                })
             }
         },
         async getComment({ postId, createdAt, rankType, pageSize, more } = {}, { api, post: { commentList, commentCount } }) {
@@ -83,7 +94,12 @@ export const post = {
 
             try {
                 const { data } = await api.getPostComment({ postId, createdAt, rankType, pageSize })
-                this.setComment({ commentList: data.d.comments, commentCount: data.d.count, more })
+
+                this.setComment({
+                    commentList: data.d.comments,
+                    commentCount: data.d.count,
+                    more
+                })
             } catch (err) {
                 console.log(err)
             }

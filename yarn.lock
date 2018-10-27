@@ -5675,6 +5675,10 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
+react-content-loader@^3.2.0:
+  version "3.2.0"
+  resolved "http://registry.npm.taobao.org/react-content-loader/download/react-content-loader-3.2.0.tgz#39a6a035a5dddc2270432c1df7950e37f179dcf2"
+
 react-dom@^16.5.1:
   version "16.5.1"
   resolved "http://registry.npm.taobao.org/react-dom/download/react-dom-16.5.1.tgz#29d0c5a01ed3b6b4c14309aa91af6ec4eb4f292c"

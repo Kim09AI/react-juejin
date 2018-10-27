@@ -10,7 +10,7 @@ const mapState = state => ({
 
 @withRouter
 @connect(mapState)
-export default class ProgressBar extends React.Component {
+export default class ProgressBar extends React.PureComponent {
     static propTypes = {
         location: PropTypes.object.isRequired,
         history: PropTypes.object.isRequired,

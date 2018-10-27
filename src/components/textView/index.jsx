@@ -5,7 +5,7 @@ import './style.styl'
 
 const linkPattern = /(((http|https):\/\/)([\w-]+\.)+[\w-]+(\/[\w\u4e00-\u9fa5\-./?@%!&=+~:#;,]*)?)/ig
 
-export default class TextView extends React.Component {
+export default class TextView extends React.PureComponent {
     static defaultProps = {
         content: '',
         subLen: 100

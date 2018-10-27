@@ -31,6 +31,7 @@ export default class TabList extends React.Component {
 
     componentWillUnmount() {
         window.removeEventListener('scroll', this.scrollToFixed)
+        clearTimeout(this.timer)
     }
 
     scrollToFixed = () => {
@@ -48,7 +49,7 @@ export default class TabList extends React.Component {
     }
 
     _syncFixedTop() {
-        setTimeout(() => {
+        this.timer = setTimeout(() => {
             const { top } = $(this.tabListWrapper).offset()
             this.top = top
             // 通知调用者，本组件fixed的临界值

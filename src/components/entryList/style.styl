@@ -13,8 +13,16 @@
                 color: $color-hot
             .post
                 color: $color-purple
-            .circle
-                margin: 0 3px
+            .left-circle
+                &:before
+                    content: '·'
+                    margin: 0 3px
+                    color: #b2bac2
+            .right-circle
+                &:after
+                    content: '·'
+                    margin: 0 3px
+                    color: #b2bac2
         .title-wrapper
             margin 0.6rem 0 0.9rem 0
             white-space nowrap
@@ -45,6 +53,7 @@
                     color: $color-text
                 .approve, .comment, .share
                     font-size: 1.2rem
+                    color: $color-text
                 .collect
                     font-size: 1.2rem
                     position relative

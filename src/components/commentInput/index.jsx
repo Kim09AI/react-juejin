@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import './style.styl'
 
-export default class CommentInput extends React.Component {
+export default class CommentInput extends React.PureComponent {
     static propTypes = {
         submit: PropTypes.func.isRequired
     }

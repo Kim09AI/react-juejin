@@ -6,7 +6,9 @@ import Helmet from 'react-helmet'
 import classNames from 'classnames'
 import qs from 'qs'
 import { last } from 'lodash-es'
+import { toast } from 'react-toastify'
 
+import Header from '../../components/header'
 import CommentList from '../../components/commentList'
 import EntryList from '../../components/entryList'
 import Pullup from '../../components/pullup'
@@ -22,7 +24,8 @@ const mapState = ({ post, loading }) => ({
     commentList: post.commentList,
     loadingComment: loading.effects.post.getComment,
     recommendEntry: post.recommendEntry,
-    tagIds: post.tagIds
+    tagIds: post.tagIds,
+    commentCount: post.commentCount
 })
 
 const mapDispatch = ({ post }) => ({
@@ -48,7 +51,8 @@ export default class Post extends React.Component {
         checkPostLike: PropTypes.func.isRequired,
         toggleRecommendEntryLike: PropTypes.func.isRequired,
         toggleCommentLike: PropTypes.func.isRequired,
-        tagIds: PropTypes.string.isRequired
+        tagIds: PropTypes.string.isRequired,
+        commentCount: PropTypes.number.isRequired
     }
 
     componentDidMount() {
@@ -57,6 +61,7 @@ export default class Post extends React.Component {
 
     componentWillUnmount() {
         window.removeEventListener('scroll', this.lazyLoadRecommend)
+        clearTimeout(this.timer)
     }
 
     init() {
@@ -78,6 +83,7 @@ export default class Post extends React.Component {
 
     commentSubmit = (value) => {
         console.log(value)
+        toast.info('功能未开发')
     }
 
     getTagIds(tags) {
@@ -124,7 +130,9 @@ export default class Post extends React.Component {
     }
 
     scrollToComment = () => {
-        scrollToElement(this.commentWrapper, -100)
+        this.timer = setTimeout(() => {
+            scrollToElement(this.commentWrapper, -100)
+        }, 20)
     }
 
     _getMoreComment = () => {
@@ -173,10 +181,15 @@ export default class Post extends React.Component {
     }
 
     render() {
-        const { info, content, commentList, loadingComment, recommendEntry, tagIds } = this.props
+        const { info, content, commentList, loadingComment, recommendEntry, tagIds, commentCount } = this.props
 
         if (Object.keys(info).length === 0) {
-            return <EmptyContentTip tip="找不到该文章或该文章非掘金站内文章" />
+            return (
+                <div>
+                    <Header boundaryTop={800} />
+                    <EmptyContentTip tip="找不到该文章或该文章非掘金站内文章" />
+                </div>
+            )
         }
 
         return (
@@ -184,6 +197,7 @@ export default class Post extends React.Component {
                 <Helmet>
                     <title>{info.title} - 掘金</title>
                 </Helmet>
+                <Header boundaryTop={800} />
                 <div className="main" styleName="post-wrapper">
                     <div styleName="user">
                         <Link to={`/user/${info.user.objectId}`}>
@@ -206,7 +220,7 @@ export default class Post extends React.Component {
                         <CommentInput submit={this.commentSubmit} />
                         <CommentList list={commentList} onLikeClick={this._toggleCommentLike} />
                         {
-                            commentList.length > 0 && (
+                            commentList.length > 0 && commentList.length < commentCount && (
                                 <div styleName="load-more" onClick={this._getMoreComment}>{loadingComment ? '加载中...' : '查看更多 >'}</div>
                             )
                         }

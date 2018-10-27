@@ -6,13 +6,15 @@ import classNames from 'classnames'
 import EntryList from '../../components/entryList'
 import Pullup from '../../components/pullup'
 import NavList from '../../components/navList'
+import EntryLoader from '../../components/entryLoader'
 import { queryParse } from '../../utils'
 import './style.styl'
 
-const mapState = state => ({
-    entryList: state.home.entryList,
-    isLogin: state.user.isLogin,
-    categoryList: state.home.categoryList
+const mapState = ({ home, user, loading }) => ({
+    entryList: home.entryList,
+    isLogin: user.isLogin,
+    categoryList: home.categoryList,
+    loadingEntry: loading.effects.home.getEntryList
 })
 
 const mapDispatch = ({ home: { getEntryList, toggleEntryLike } }) => ({
@@ -28,7 +30,8 @@ export default class Home extends React.Component {
         toggleEntryLike: PropTypes.func.isRequired,
         isLogin: PropTypes.bool.isRequired,
         location: PropTypes.object.isRequired,
-        categoryList: PropTypes.array.isRequired
+        categoryList: PropTypes.array.isRequired,
+        loadingEntry: PropTypes.bool.isRequired
     }
 
     constructor(props) {
@@ -110,8 +113,10 @@ export default class Home extends React.Component {
         return this.props.toggleEntryLike(payload)
     }
 
+    _getNavLink = (item) => `/?category=${item.title}`
+
     render() {
-        const { entryList, isLogin, categoryList } = this.props
+        const { entryList, isLogin, categoryList, loadingEntry } = this.props
         const { currentCategoryIndex, sort, sortTabs } = this.state
 
         return (
@@ -124,7 +129,7 @@ export default class Home extends React.Component {
                             translateClass="home-translate-class"
                             boundaryTop={800}
                             selectedIndex={currentCategoryIndex}
-                            getLink={(item) => `/?category=${item.title}`}
+                            getLink={this._getNavLink}
                         />
                     )
                 }
@@ -154,10 +159,10 @@ export default class Home extends React.Component {
                             )
 
                     }
-                    <EntryList
-                        entryList={entryList}
-                        onApproveClick={this._toggleEntryLike}
-                    />
+                    <EntryList entryList={entryList} onApproveClick={this._toggleEntryLike} />
+                    {
+                        loadingEntry && <EntryLoader />
+                    }
                 </div>
                 <Pullup loader={this._getEntryList} />
             </div>

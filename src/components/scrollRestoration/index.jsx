@@ -12,7 +12,7 @@ if (process.env.isClient) {
 }
 
 @withRouter
-export default class ScrollRestoration extends React.Component {
+export default class ScrollRestoration extends React.PureComponent {
     static propTypes = {
         location: PropTypes.object.isRequired
     }

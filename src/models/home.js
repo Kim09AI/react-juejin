@@ -73,7 +73,7 @@ export const home = {
                 })
 
                 this.setEntryList({
-                    entryList: data.d.entrylist,
+                    entryList: data.d.entrylist || [],
                     more,
                     category,
                     sort

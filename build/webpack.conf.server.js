@@ -45,7 +45,9 @@ module.exports = merge(base, {
         new webpack.DefinePlugin({
             'process.env': {
                 isClient: 'false',
-                isServer: 'true'
+                isServer: 'true',
+                HOST: JSON.stringify(process.env.HOST),
+                PORT: JSON.stringify(process.env.PORT)
             }
         })
     ]

@@ -93,6 +93,7 @@
     "prop-types": "^15.6.2",
     "qs": "^6.5.2",
     "react": "^16.5.1",
+    "react-content-loader": "^3.2.0",
     "react-dom": "^16.5.1",
     "react-helmet": "^5.2.0",
     "react-lazyload": "^2.3.0",

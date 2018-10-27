@@ -17,7 +17,7 @@ const mapDispatch = ({ authPopup: { hideAuthPopup, toggleType }, user: { loginBy
 })
 
 @connect(mapState, mapDispatch)
-export default class AuthPopup extends React.Component {
+export default class AuthPopup extends React.PureComponent {
     static propTypes = {
         popupState: PropTypes.bool.isRequired,
         type: PropTypes.string.isRequired,

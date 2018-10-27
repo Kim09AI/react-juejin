@@ -49,11 +49,9 @@ export default class ImgView extends React.Component {
             <ul styleName="img-list">
                 {
                     imgList.map(item => (
-                        <li
-                            key={item.url}
-                            styleName="item"
-                            style={{ backgroundImage: `url(${item.url})`, width: `${item.w}%`, paddingTop: `${item.imgScale}%` }}
-                        />
+                        <li key={item.url} styleName="item" style={{ width: `${item.w}%` }}>
+                            <div styleName="img" style={{ backgroundImage: `url(${item.url})`, width: '100%', paddingTop: `${item.imgScale}%` }} />
+                        </li>
                     ))
                 }
             </ul>

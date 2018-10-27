@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-import LazyLoad from 'react-lazyload'
 import './style.styl'
 
 export default function BookList(props) {
@@ -13,11 +12,7 @@ export default function BookList(props) {
                 list.map(item => (
                     <li key={item.id} styleName="item">
                         <Link to={`/book/${item.id}`} styleName="link">
-                            <div styleName="icon-wrapper">
-                                <LazyLoad height="100%">
-                                    <div styleName="icon" style={{ backgroundImage: `url(${item.img})` }} />
-                                </LazyLoad>
-                            </div>
+                            <div styleName="icon-wrapper" style={{ backgroundImage: `url(${item.img})` }} />
                             <div styleName="content">
                                 <div styleName="title">{item.title}</div>
                                 <div styleName="author">

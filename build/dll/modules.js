@@ -14,5 +14,9 @@ module.exports = [
     'axios',
     'babel-polyfill',
     'classnames',
-    'react-toastify'
+    'react-toastify',
+    'react-content-loader',
+    'react-lazyload',
+    'react-swipe',
+    'swipe-js-iso'
 ]

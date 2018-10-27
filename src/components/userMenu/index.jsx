@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import './style.styl'
 
-export default class UserMenu extends React.Component {
+export default class UserMenu extends React.PureComponent {
     static propTypes = {
         uid: PropTypes.string.isRequired,
         logout: PropTypes.func.isRequired

@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-export default Component => class extends React.Component {
+export default Component => class extends React.PureComponent {
     static defaultProps = {
         boundaryTop: 200, // 隐藏组件的临界点滚动条高度
     }

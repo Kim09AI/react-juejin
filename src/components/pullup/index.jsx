@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { debounce } from 'lodash-es'
 
-export default class Pullup extends React.Component {
+export default class Pullup extends React.PureComponent {
     static defaultProps = {
         loading: null
     }
@@ -23,6 +23,7 @@ export default class Pullup extends React.Component {
 
     componentWillUnmount() {
         window.removeEventListener('scroll', this._scroll)
+        this.unMounted = true
     }
 
     scroll = async () => {
@@ -42,7 +43,8 @@ export default class Pullup extends React.Component {
             })
             await this.props.loader()
         } finally {
-            this.setState({
+            // 有可能在加载数据的过程中卸载了组件
+            !this.unMounted && this.setState({
                 loaded: false
             })
         }
