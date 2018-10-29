@@ -10,7 +10,7 @@ import { toast } from 'react-toastify'
 
 import Header from '../../components/header'
 import CommentList from '../../components/commentList'
-import EntryList from '../../components/entryList'
+import VirtualEntryList from '../../components/virtualEntryList'
 import Pullup from '../../components/pullup'
 import EmptyContentTip from '../../components/emptyContentTip'
 import CommentInput from '../../components/commentInput'
@@ -52,11 +52,19 @@ export default class Post extends React.Component {
         toggleRecommendEntryLike: PropTypes.func.isRequired,
         toggleCommentLike: PropTypes.func.isRequired,
         tagIds: PropTypes.string.isRequired,
-        commentCount: PropTypes.number.isRequired
+        commentCount: PropTypes.number.isRequired,
+        location: PropTypes.object.isRequired
     }
 
     componentDidMount() {
         this.init()
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.location !== this.props.location) {
+            const isLoadingRecommend = this.initCheckLoadRecommend()
+            !isLoadingRecommend && window.addEventListener('scroll', this.lazyLoadRecommend)
+        }
     }
 
     componentWillUnmount() {
@@ -77,7 +85,9 @@ export default class Post extends React.Component {
         const search = window.location.search.substr(1)
         const { pos } = qs.parse(search)
         if (pos === 'comment') {
-            this.scrollToComment()
+            this.timer = setTimeout(() => {
+                this.scrollToComment()
+            }, 20)
         }
     }
 
@@ -130,9 +140,7 @@ export default class Post extends React.Component {
     }
 
     scrollToComment = () => {
-        this.timer = setTimeout(() => {
-            scrollToElement(this.commentWrapper, -100)
-        }, 20)
+        scrollToElement(this.commentWrapper, -100)
     }
 
     _getMoreComment = () => {
@@ -230,7 +238,13 @@ export default class Post extends React.Component {
                     tagIds === this.getTagIds(info.tags) && recommendEntry.length > 0 && (
                         <div styleName="recommend-wrapper">
                             <div styleName="recommend-title">相关推荐</div>
-                            <EntryList entryList={recommendEntry} onApproveClick={this._toggleRecommentPostLike} />
+                            <VirtualEntryList
+                                items={recommendEntry}
+                                itemHeight={108}
+                                itemBuffer={8}
+                                contained={false}
+                                onApproveClick={this._toggleRecommentPostLike}
+                            />
                             <Pullup loader={() => this.getRecommendEntry(true)} />
                         </div>
                     )

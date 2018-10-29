@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import EntryList from '../../components/entryList'
+import VirtualEntryList from '../../components/virtualEntryList'
 import Pullup from '../../components/pullup'
 import NavList from '../../components/navList'
 import EntryLoader from '../../components/entryLoader'
@@ -117,7 +117,7 @@ export default class Home extends React.Component {
 
     render() {
         const { entryList, isLogin, categoryList, loadingEntry } = this.props
-        const { currentCategoryIndex, sort, sortTabs } = this.state
+        const { currentCategoryIndex, sort, sortTabs, category } = this.state
 
         return (
             <div>
@@ -157,9 +157,15 @@ export default class Home extends React.Component {
                                     <span styleName="more">查看更多</span>
                                 </div>
                             )
-
                     }
-                    <EntryList entryList={entryList} onApproveClick={this._toggleEntryLike} />
+                    <VirtualEntryList
+                        key={sort + category}
+                        items={entryList}
+                        itemHeight={108}
+                        itemBuffer={8}
+                        contained={false}
+                        onApproveClick={this._toggleEntryLike}
+                    />
                     {
                         loadingEntry && <EntryLoader />
                     }

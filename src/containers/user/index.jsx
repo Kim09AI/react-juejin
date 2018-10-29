@@ -134,7 +134,7 @@ export default class User extends React.Component {
             return (
                 <div>
                     <Header boundaryTop={boundaryTop} />
-                    <EmptyContentTip tip="找不到该用户" />
+                    <EmptyContentTip tip={isLogin ? '找不到该用户' : '尚未登录，无法获取用户数据'} />
                 </div>
             )
         }

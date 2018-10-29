@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
 import { ToastContainer, Flip } from 'react-toastify'
+import pureWrapper from './components/pureWrapper'
 import ProgressBar from './components/progressBar'
 import Header from './components/header'
 import AuthPopup from './components/authPopup'
@@ -11,6 +12,8 @@ import ScrollRestoration from './components/scrollRestoration'
 import ErrorBoundary from './components/errorBoundary'
 
 import 'react-toastify/dist/ReactToastify.css'
+
+const PureToastContainer = pureWrapper(ToastContainer)
 
 const mapState = state => ({
     isLogin: state.user.isLogin
@@ -63,7 +66,7 @@ export default class App extends React.Component {
                     <meta name="description" content="react-juejin - 高仿掘金服务端渲染项目" />
                 </Helmet>
                 <ProgressBar />
-                <ToastContainer
+                <PureToastContainer
                     position="top-center"
                     autoClose={3000}
                     hideProgressBar
@@ -74,7 +77,7 @@ export default class App extends React.Component {
                     draggable
                     pauseOnHover
                     transition={Flip}
-                    style={{ textAlign: 'center' }}
+                    className="align-center"
                 />
                 {showHeader ? <Header boundaryTop={800} /> : null}
                 {!isLogin && <AuthPopup />}

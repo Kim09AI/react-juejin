@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import Pullup from '../../components/pullup'
-import EntryList from '../../components/entryList'
+import VirtualEntryList from '../../components/virtualEntryList'
 import SubHeader from '../../components/subHeader'
 import EmptyContentTip from '../../components/emptyContentTip'
 import './style.styl'
@@ -54,7 +54,14 @@ export default class UserLikes extends React.Component {
                 {
                     entryList.length > 0
                         ? [
-                            <EntryList key="entryList" entryList={entryList} onApproveClick={this._toggleEntryLike} />,
+                            <VirtualEntryList
+                                key="entryList"
+                                items={entryList}
+                                itemHeight={108}
+                                itemBuffer={8}
+                                contained={false}
+                                onApproveClick={this._toggleEntryLike}
+                            />,
                             <Pullup key="loadMore" loader={this._getUserLikeEntry} />
                         ]
                         : <EmptyContentTip />
