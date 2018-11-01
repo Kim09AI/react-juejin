@@ -29,7 +29,7 @@ export default class App extends React.Component {
 
     constructor(props) {
         super(props)
-        const whiteList = ['/books', '/user', '/post'] // 不显示header的白名单
+        const whiteList = [/^\/books/, /^\/user/, /^\/post\/\w+/] // 不显示header的白名单
         const showHeader = this.shouldShowHeader(whiteList, props.location.pathname)
         this.state = {
             showHeader,
@@ -52,7 +52,7 @@ export default class App extends React.Component {
     }
 
     shouldShowHeader(whiteList, pathname) {
-        return !whiteList.some(_pathname => pathname.startsWith(_pathname))
+        return !whiteList.some(pattern => pattern.test(pathname))
     }
 
     render() {

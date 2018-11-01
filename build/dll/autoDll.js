@@ -66,6 +66,8 @@ function getOldVersions() {
 
 function getVersions() {
     const versions = {}
+
+    // 后面是通过JSON.stringify比较对象是否相等，key的设置顺序会影响JSON.stringify的结果，所有要先排序
     modules.sort().forEach(module => {
         const version = dependencies[module]
         versions[module] = version
