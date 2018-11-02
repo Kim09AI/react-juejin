@@ -46,7 +46,7 @@ export default class AuthPopup extends React.PureComponent {
             return '手机号不能为空'
         }
 
-        if (!/^1[358][01589]\d{8}/.test(phone)) {
+        if (!/^1[358][01589]\d{8}$/.test(phone)) {
             return '手机号码不正确'
         }
 

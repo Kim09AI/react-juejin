@@ -76,7 +76,10 @@ export const getComposeText = (str, ...args) => {
  */
 const maxCode = parseInt('0xFFFF', 16) // eslint-disable-line
 export const substr = (str, start = 0, len = str.length) => {
-    const code = str.codePointAt(len - 1)
+    if (!str) return ''
+
+    const end = start + len
+    const code = str.codePointAt(end - 1)
 
     if (code > maxCode) {
         len += 1 // eslint-disable-line

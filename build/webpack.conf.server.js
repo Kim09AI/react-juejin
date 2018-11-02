@@ -37,7 +37,36 @@ module.exports = merge(base, {
             },
             {
                 test: /\.(css|styl)$/,
-                loader: 'ignore-loader'
+                oneOf: [
+                    {
+                        resource: /node_modules/,
+                        use: ['ignore-loader']
+                    },
+                    {
+                        use: [
+                            {
+                                loader: 'css-loader/locals',
+                                options: {
+                                    modules: config.common.cssModules,
+                                    localIdentName: process.env.NODE_ENV === 'development'
+                                        ? '[path]_[name]_[local]_[hash:base64:5]'
+                                        : '[local]_[hash:base64:5]',
+                                    importLoaders: 1,
+                                    camelCase: true
+                                }
+                            },
+                            {
+                                loader: 'stylus-loader',
+                                options: {
+                                    import: [
+                                        r('src/assets/styles/mixin.styl'),
+                                        r('src/assets/styles/variable.styl')
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                ]
             }
         ]
     },

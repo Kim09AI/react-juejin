@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { substr } from '../../utils'
 import './style.styl'
 
-const linkPattern = /(((http|https):\/\/)([\w-]+\.)+[\w-]+(\/[\w\u4e00-\u9fa5\-./?@%!&=+~:#;,]*)?)/ig
+const linkPattern = /((http|https):\/\/([\w-]+\.)+[\w-]+(\/[\w\u4e00-\u9fa5\-./?@%!&=+~:#;,]*)?)/ig
 
 export default class TextView extends React.PureComponent {
     static defaultProps = {
