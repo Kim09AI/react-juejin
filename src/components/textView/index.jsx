@@ -5,6 +5,53 @@ import './style.styl'
 
 const linkPattern = /((http|https):\/\/([\w-]+\.)+[\w-]+(\/[\w\u4e00-\u9fa5\-./?@%!&=+~:#;,]*)?)/ig
 
+function getLinkContent(content) {
+    const pos = []
+    let diffLen = 0
+
+    const newContent = content.replace(linkPattern, (url, ...args) => {
+        // 获取在newContent中的开始下标
+        const index = args[args.length - 2] + diffLen
+        const link = `<a href="${url}">网页链接</a>`
+
+        // 记录链接在newContent中出现的开始和结束的下标
+        pos.push({
+            start: index,
+            end: index + link.length
+        })
+
+        diffLen += link.length - url.length
+
+        return link
+    })
+
+    return {
+        content: newContent,
+        pos
+    }
+}
+
+function getSubContent(includeLink, linkData, originContent, subLen) {
+    if (!includeLink) {
+        return substr(originContent, 0, subLen)
+    }
+
+    const { content, pos } = linkData
+    let newSubLen = subLen
+    pos.some(({ start, end }) => {
+        // 截取的字符串不包含当前链接
+        if (newSubLen <= start) {
+            return true
+        }
+
+        // 截取的位置包含该链接
+        newSubLen += end - start
+        return false
+    })
+
+    return substr(content, 0, newSubLen)
+}
+
 export default class TextView extends React.PureComponent {
     static defaultProps = {
         content: '',
@@ -13,86 +60,37 @@ export default class TextView extends React.PureComponent {
 
     static propTypes = {
         content: PropTypes.string,
-        subLen: PropTypes.number
+        subLen: PropTypes.number, // eslint-disable-line
     }
 
-    constructor(props) {
-        super(props)
-
-        const { content } = props
-        const includeLink = !!content.match(linkPattern)
-        const linkData = includeLink ? this.getLinkContent(content) : {}
-
-        this.state = {
-            show: false,
-            includeLink,
-            linkData,
-            subContent: this.getSubContent(includeLink, linkData, props.content, props.subLen)
-        }
+    state = {
+        show: false,
+        includeLink: false,
+        linkData: {},
+        subContent: '',
+        content: '',
+        subLen: 100
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.content !== this.props.content || nextProps.subLen !== this.props.subLen) {
+    static getDerivedStateFromProps(nextProps, prevState) {
+        if (nextProps.content !== prevState.content || nextProps.subLen !== prevState.subLen) {
             const includeLink = nextProps.content.match(linkPattern)
-            const linkData = includeLink ? this.getLinkContent(nextProps.content) : {}
+            const linkData = includeLink ? getLinkContent(nextProps.content) : {}
 
-            this.setState({
+            return {
                 includeLink,
                 linkData,
-                subContent: this.getSubContent(includeLink, linkData, nextProps.content, nextProps.subLen)
-            })
+                subContent: getSubContent(includeLink, linkData, nextProps.content, nextProps.subLen),
+                content: nextProps.content,
+                subLen: nextProps.subLen
+            }
         }
+
+        return null
     }
 
     getFullContent() {
         return this.state.includeLink ? this.state.linkData.content : this.props.content
-    }
-
-    getSubContent(includeLink, linkData, originContent, subLen) {
-        if (!includeLink) {
-            return substr(originContent, 0, subLen)
-        }
-
-        const { content, pos } = linkData
-        let newSubLen = subLen
-        pos.some(({ start, end }) => {
-            // 截取的字符串不包含当前链接
-            if (newSubLen <= start) {
-                return true
-            }
-
-            // 截取的位置包含该链接
-            newSubLen += end - start
-            return false
-        })
-
-        return substr(content, 0, newSubLen)
-    }
-
-    getLinkContent(content) {
-        const pos = []
-        let diffLen = 0
-
-        const newContent = content.replace(linkPattern, (url, ...args) => {
-            // 获取在newContent中的开始下标
-            const index = args[args.length - 2] + diffLen
-            const link = `<a href="${url}">网页链接</a>`
-
-            // 记录链接在newContent中出现的开始和结束的下标
-            pos.push({
-                start: index,
-                end: index + link.length
-            })
-
-            diffLen += link.length - url.length
-
-            return link
-        })
-
-        return {
-            content: newContent,
-            pos
-        }
     }
 
     toggleText = () => {

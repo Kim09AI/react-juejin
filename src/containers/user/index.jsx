@@ -9,6 +9,26 @@ import TabList from '../../components/tabList'
 import EmptyContentTip from '../../components/emptyContentTip'
 import './style.styl'
 
+function getUserMenu(detail) {
+    return [
+        { name: '动态', path: 'activities' },
+        { name: '专栏', path: 'posts', count: detail.postedPostsCount },
+        { name: '沸点', path: 'pins', count: detail.pinCount },
+        { name: '赞', path: 'likes', count: detail.collectedEntriesCount },
+        { name: '关注', path: 'tags' }
+    ]
+}
+
+function getUserDetail(currentId, props) {
+    const { isLogin, uid, userDetail, otherUserDetail } = props
+
+    if (!isLogin) {
+        return otherUserDetail
+    }
+
+    return uid === currentId ? userDetail : otherUserDetail
+}
+
 const mapState = ({ user }) => ({
     isLogin: user.isLogin,
     uid: user.uid,
@@ -26,7 +46,7 @@ export default class User extends React.Component {
     static propTypes = {
         isLogin: PropTypes.bool.isRequired,
         uid: PropTypes.string.isRequired,
-        userDetail: PropTypes.object.isRequired,
+        userDetail: PropTypes.object.isRequired, // eslint-disable-line
         otherUserDetail: PropTypes.object.isRequired,
         match: PropTypes.object.isRequired,
         route: PropTypes.object.isRequired,
@@ -35,32 +55,28 @@ export default class User extends React.Component {
         toggleUserFollow: PropTypes.func.isRequired
     }
 
-    constructor(props) {
-        super(props)
-
-        const currentId = props.match.params.id
-        const detail = this.getUserDetail(currentId)
-        this.state = {
-            boundaryTop: 800,
-            currentId,
-            userMenus: this.getUserMenu(detail)
-        }
+    state = {
+        boundaryTop: 800,
+        currentId: '',
+        userMenus: []
     }
 
     componentDidMount() {
         this.checkCurrentUserFollow()
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.match.params.id !== this.props.match.params.id) {
-            const currentId = nextProps.match.params.id
-            const detail = this.getUserDetail(currentId)
+    static getDerivedStateFromProps(nextProps, prevState) {
+        const currentId = nextProps.match.params.id
+        if (currentId !== prevState.currentId) {
+            const detail = getUserDetail(currentId, nextProps)
 
-            this.setState({
+            return {
                 currentId,
-                userMenus: this.getUserMenu(detail)
-            })
+                userMenus: getUserMenu(detail)
+            }
         }
+
+        return null
     }
 
     componentDidUpdate(prevProps) {
@@ -73,26 +89,6 @@ export default class User extends React.Component {
         this.setState({
             boundaryTop
         })
-    }
-
-    getUserDetail(currentId) {
-        const { isLogin, uid, userDetail, otherUserDetail } = this.props
-
-        if (!isLogin) {
-            return otherUserDetail
-        }
-
-        return uid === currentId ? userDetail : otherUserDetail
-    }
-
-    getUserMenu(detail) {
-        return [
-            { name: '动态', path: 'activities' },
-            { name: '专栏', path: 'posts', count: detail.postedPostsCount },
-            { name: '沸点', path: 'pins', count: detail.pinCount },
-            { name: '赞', path: 'likes', count: detail.collectedEntriesCount },
-            { name: '关注', path: 'tags' }
-        ]
     }
 
     getSelectedIndex() {
@@ -128,7 +124,7 @@ export default class User extends React.Component {
         const { isLogin, uid, route } = this.props
         const { boundaryTop, currentId, userMenus } = this.state
 
-        const currentUserDetail = this.getUserDetail(currentId)
+        const currentUserDetail = getUserDetail(currentId, this.props)
 
         if (Object.keys(currentUserDetail).length === 0) {
             return (

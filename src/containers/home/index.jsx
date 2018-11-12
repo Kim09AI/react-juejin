@@ -10,6 +10,22 @@ import EntryLoader from '../../components/entryLoader'
 import { queryParse } from '../../utils'
 import './style.styl'
 
+function getCurrentCategoryIndex(category, categoryList) {
+    const index = categoryList.findIndex(item => item.title === category)
+
+    return index === -1 ? 0 : index
+}
+
+function getQuery(category, sort, categoryList, sortTabs) {
+    const matchedItem = categoryList.find(item => item.title === category) || {}
+    const _sort = sortTabs.some(item => item.name === sort) ? sort : sortTabs[0].name
+
+    return {
+        category: matchedItem.id || 'all',
+        sort: _sort
+    }
+}
+
 const mapState = ({ home, user, loading }) => ({
     entryList: home.entryList,
     isLogin: user.isLogin,
@@ -42,46 +58,32 @@ export default class Home extends React.Component {
             { text: '最新', name: 'newest' },
             { text: '评论', name: 'comment' }
         ]
-        const { category, sort } = this.getQuery(props.location.search, props.categoryList, sortTabs)
-
         this.state = {
-            currentCategoryIndex: this.getCurrentCategoryIndex(props.location.search, props.categoryList),
+            currentCategoryIndex: -1,
             sortTabs,
-            category,
-            sort
+            category: '',
+            sort: '',
+            search: undefined
         }
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (this.props.isLogin && nextProps.location.search !== this.props.location.search) {
+    static getDerivedStateFromProps(nextProps, prevState) {
+        if (nextProps.isLogin && nextProps.location.search !== prevState.search) {
             const { location: { search }, categoryList } = nextProps
+            const query = queryParse(search)
 
-            const currentCategoryIndex = this.getCurrentCategoryIndex(search, categoryList)
-            const { category, sort } = this.getQuery(search, categoryList, this.state.sortTabs)
-            this.setState({
+            const currentCategoryIndex = getCurrentCategoryIndex(query.category, categoryList)
+            const { category, sort } = getQuery(query.category, query.sort, categoryList, prevState.sortTabs)
+
+            return {
                 currentCategoryIndex,
                 category,
-                sort
-            })
+                sort,
+                search: nextProps.location.search
+            }
         }
-    }
 
-    getQuery(search, categoryList, sortTabs) {
-        const { category: categoryValue, sort } = queryParse(search)
-        const matchedItem = categoryList.find(item => item.title === categoryValue) || {}
-        const _sort = sortTabs.some(item => item.name === sort) ? sort : sortTabs[0].name
-
-        return {
-            category: matchedItem.id || 'all',
-            sort: _sort
-        }
-    }
-
-    getCurrentCategoryIndex(search, categoryList) {
-        const { category } = queryParse(search)
-        const index = categoryList.findIndex(item => item.title === category)
-
-        return index === -1 ? 0 : index
+        return null
     }
 
     getSortLink(sortType) {

@@ -11,16 +11,16 @@ export function timeFormat(dateStr) {
     // 先toString转成当前时区的时间再getTime
     const dateTime = new Date(new Date(dateStr).toString()).getTime()
     const now = new Date().getTime()
-    let time = (now - dateTime) / 1000
+    let diff = (now - dateTime) / 1000
 
-    const index = timeFormatArr.findIndex((item, i) => item <= time && timeFormatArr[i + 1] > time)
+    const index = timeFormatArr.findIndex((item, i) => item <= diff && timeFormatArr[i + 1] > diff)
 
     if (index === 0) {
         return timeUnit[0]
     }
 
-    time = time / timeFormatArr[index] | 0 // eslint-disable-line
-    return time + timeUnit[index]
+    diff = diff / timeFormatArr[index] | 0 // eslint-disable-line
+    return diff + timeUnit[index]
 }
 
 export const getPostId = url => {

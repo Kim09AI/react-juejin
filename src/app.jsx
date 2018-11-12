@@ -15,6 +15,10 @@ import 'react-toastify/dist/ReactToastify.css'
 
 const PureToastContainer = pureWrapper(ToastContainer)
 
+function shouldShowHeader(whiteList, pathname) {
+    return !whiteList.some(pattern => pattern.test(pathname))
+}
+
 const mapState = state => ({
     isLogin: state.user.isLogin
 })
@@ -23,36 +27,27 @@ const mapState = state => ({
 export default class App extends React.Component {
     static propTypes = {
         route: PropTypes.object.isRequired,
-        location: PropTypes.object.isRequired,
+        location: PropTypes.object.isRequired, // eslint-disable-line
         isLogin: PropTypes.bool.isRequired
     }
 
-    constructor(props) {
-        super(props)
-        const whiteList = [/^\/books/, /^\/user/, /^\/post\/\w+/] // 不显示header的白名单
-        const showHeader = this.shouldShowHeader(whiteList, props.location.pathname)
-        this.state = {
-            showHeader,
-            whiteList
-        }
+    state = {
+        showHeader: false,
+        whiteList: [/^\/books/, /^\/user/, /^\/post\/\w+/], // 不显示header的白名单
+        pathname: ''
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.location.pathname !== this.props.location.pathname) {
-            if (!this.shouldShowHeader(this.state.whiteList, nextProps.location.pathname)) {
-                this.setState({
-                    showHeader: false
-                })
-            } else if (this.state.showHeader === false) {
-                this.setState({
-                    showHeader: true
-                })
+    static getDerivedStateFromProps(nextProps, prevState) {
+        if (nextProps.location.pathname !== prevState.pathname) {
+            const showHeader = shouldShowHeader(prevState.whiteList, nextProps.location.pathname)
+
+            return {
+                showHeader,
+                pathname: nextProps.location.pathname
             }
         }
-    }
 
-    shouldShowHeader(whiteList, pathname) {
-        return !whiteList.some(pattern => pattern.test(pathname))
+        return null
     }
 
     render() {

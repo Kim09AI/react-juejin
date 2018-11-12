@@ -23,28 +23,24 @@ export default class Books extends React.Component {
         navList: PropTypes.array.isRequired,
         getBookList: PropTypes.func.isRequired,
         match: PropTypes.object.isRequired,
-        location: PropTypes.object.isRequired
+        location: PropTypes.object.isRequired, // eslint-disable-line
     }
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            currentIndex: this.getCurrentIndex(props.navList, props.match.params.alias)
-        }
+    state = {
+        currentIndex: -1,
+        pathname: ''
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.location.pathname !== this.props.location.pathname) {
+    static getDerivedStateFromProps(nextProps, prevState) {
+        if (nextProps.location.pathname !== prevState.pathname) {
             const { alias } = nextProps.match.params
-            this.setState({
-                currentIndex: this.getCurrentIndex(this.props.navList, alias)
-            })
+            return {
+                currentIndex: nextProps.navList.findIndex(item => item.alias === alias),
+                pathname: nextProps.location.pathname
+            }
         }
-    }
 
-    getCurrentIndex(navList, alias) {
-        const index = navList.findIndex(item => item.alias === alias)
-        return index !== -1 ? index : 0
+        return null
     }
 
     _getBookList = () => {

@@ -215,8 +215,6 @@ module.exports = merge(base, {
             dontCacheBustUrlsMatching: /\.\w{8}\./,
             filename: 'service-worker.js',
             minify: true,
-            navigateFallback: '/',
-            navigateFallbackWhitelist: [/^(?!\/__).*/],
             staticFileGlobsIgnorePatterns: [
                 /\.map$/,
                 /server\.ejs/,

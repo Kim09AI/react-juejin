@@ -22,9 +22,8 @@ const mapDispatch = ({ authPopup: { showAuthPopup }, user: { logout } }) => ({
 @ScrollAndTranslate
 export default class Header extends React.Component {
     static propTypes = {
-        location: PropTypes.object.isRequired,
+        location: PropTypes.object.isRequired, // eslint-disable-line
         showAuthPopup: PropTypes.func.isRequired,
-        history: PropTypes.object.isRequired,
         translateTo: PropTypes.bool.isRequired,
         isLogin: PropTypes.bool.isRequired,
         userDetail: PropTypes.object.isRequired,
@@ -41,11 +40,11 @@ export default class Header extends React.Component {
             { text: '开源库', path: '/repos' },
             { text: '活动', path: '/events' }
         ]
-        const currentIndex = this.getCurrentIndex(navList, props.location.pathname)
         this.state = {
             navList,
-            currentIndex,
-            showNavList: false
+            currentIndex: -1,
+            showNavList: false,
+            pathname: ''
         }
     }
 
@@ -53,22 +52,21 @@ export default class Header extends React.Component {
         document.addEventListener('click', this.hideNavList)
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.history.location.pathname !== this.props.location.pathname) {
-            const currentIndex = this.getCurrentIndex(this.state.navList, nextProps.history.location.pathname)
-            this.setState(() => ({
-                currentIndex
-            }))
+    static getDerivedStateFromProps(nextProps, prevState) {
+        const nextPathname = nextProps.location.pathname
+        if (nextPathname !== prevState.pathname) {
+            const currentIndex = prevState.navList.findIndex(item => item.path === nextPathname)
+            return {
+                currentIndex,
+                pathname: nextPathname
+            }
         }
+
+        return null
     }
 
     componentWillUnmount() {
         document.removeEventListener('click', this.hideNavList)
-    }
-
-    getCurrentIndex(navList, pathname) {
-        const index = navList.findIndex(item => item.path === pathname)
-        return index
     }
 
     toggleNavList = () => {

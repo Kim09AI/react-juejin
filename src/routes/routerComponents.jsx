@@ -89,41 +89,53 @@ export default {
         },
         deferred: true
     }),
+
     Books: deferredAsyncConnect(Books)({
         promise: ({ store, match: { params } }) => Promise.all([
             store.dispatch.books.getBookList({ alias: params.alias }),
             store.dispatch.books.getNavList()
         ])
     }),
+
     Repos: deferredAsyncConnect(Repos)({
         promise: ({ store }) => store.dispatch.repos.getRepoList()
     }),
+
     Pins: deferredAsyncConnect(Pins)({
         promise: ({ store }) => store.dispatch.pins.getPinList()
     }),
+
     Events: deferredAsyncConnect(Events)({
         promise: ({ store }) => store.dispatch.events.getEventList({ pageNum: 1 })
     }),
+
     Post: deferredAsyncConnect(Post)({
         promise: ({ store, match: { params } }) => store.dispatch.post.getDetail(params.postId)
     }),
+
     User: deferredAsyncConnect(User)({
         promise: ({ store, match: { params } }) => store.dispatch.user.getUserDetailById({ userId: params.id })
     }),
+
     Activities: deferredAsyncConnect(Activities)({
         promise: ({ store, match: { params } }) => store.dispatch.activities.getUserActivities({ targetUid: params.id })
     }),
+
     UserPosts: deferredAsyncConnect(UserPosts)({
         promise: ({ store, match: { params } }) => store.dispatch.userPosts.getUserPosts({ targetUid: params.id })
     }),
+
     UserPins: deferredAsyncConnect(UserPins)({
         promise: ({ store, match: { params } }) => store.dispatch.userPins.getUserPinList({ targetUid: params.id })
     }),
+
     UserLikes: deferredAsyncConnect(UserLikes)({
         promise: ({ store, match: { params } }) => store.dispatch.userLikes.getUserLikeEntry({ targetUid: params.id })
     }),
+
     UserTags: deferredAsyncConnect(UserTags)({
         promise: ({ store, match: { params } }) => store.dispatch.userTags.getUserSubscribeTags({ targetUid: params.id })
     }),
+
     NotMatch
 }

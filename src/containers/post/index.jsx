@@ -60,8 +60,8 @@ export default class Post extends React.Component {
         this.init()
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.location !== this.props.location) {
+    componentDidUpdate(prevProps) {
+        if (prevProps.location !== this.props.location) {
             const isLoadingRecommend = this.initCheckLoadRecommend()
             !isLoadingRecommend && window.addEventListener('scroll', this.lazyLoadRecommend)
         }

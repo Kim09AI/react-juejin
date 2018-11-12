@@ -4,16 +4,18 @@ import { withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import './style.styl'
 
-const mapState = state => ({
-    ...state.progressBar
+const mapState = ({ progressBar }) => ({
+    start: progressBar.start,
+    restart: progressBar.restart,
+    finish: progressBar.finish
 })
 
 @withRouter
 @connect(mapState)
 export default class ProgressBar extends React.PureComponent {
     static propTypes = {
-        location: PropTypes.object.isRequired,
-        history: PropTypes.object.isRequired,
+        location: PropTypes.object.isRequired, // eslint-disable-line
+        history: PropTypes.object.isRequired, // eslint-disable-line
         start: PropTypes.bool.isRequired,
         restart: PropTypes.number.isRequired,
         finish: PropTypes.bool.isRequired
@@ -31,7 +33,7 @@ export default class ProgressBar extends React.PureComponent {
         }
     }
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) { // eslint-disable-line
         // 是否是跳转到新页面
         const isNewPage = nextProps.location.pathname !== nextProps.history.location.pathname
 

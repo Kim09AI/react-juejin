@@ -18,7 +18,7 @@ import './assets/styles/index.styl'
 const initialState = window.__INITIAL_STATE__ || {} // eslint-disable-line
 
 // 设置用户验证相关的信息
-api.setUserInfo(initialState.api.userInfo)
+initialState.api && api.setUserInfo(initialState.api.userInfo)
 
 const helpers = { api }
 const store = createStore(initialState)
