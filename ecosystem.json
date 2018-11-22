@@ -21,7 +21,7 @@
             "repo": "git@github.com:Kim09AI/react-juejin.git",
             "path": "/www/react-juejin/production",
             "ssh_options": "StrictHostKeyChecking=no",
-            "post-deploy": "yarn install --prod false && npm run auto:dll && npm run clear && npm run build:client && PORT=5000 npm run build:server && npm run asyncComonCss && pm2 startOrRestart ecosystem.json --env production",
+            "post-deploy": "yarn install --prod false && npm run auto:dll && npm run clear && npm run build:client && PORT=5000 npm run build:server && pm2 startOrRestart ecosystem.json --env production",
             "env": {
                 "NODE_ENV": "production"
             }

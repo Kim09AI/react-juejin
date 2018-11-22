@@ -1,70 +1,21 @@
-import Loadable from 'react-loadable'
+import loadable from '@loadable/component'
 import { deferredAsyncConnect } from '../utils/deferredAsyncConnect'
 import { queryParse } from '../utils'
 
 import NotMatch from '../containers/notMatch'
 
-const Loading = () => null
-
-const Home = Loadable({
-    loader: () => import(/* webpackChunkName: 'page-home' */ '../containers/home'),
-    loading: Loading
-})
-
-const Books = Loadable({
-    loader: () => import(/* webpackChunkName: 'page-books' */ '../containers/books'),
-    loading: Loading
-})
-
-const Repos = Loadable({
-    loader: () => import(/* webpackChunkName: 'page-repos' */ '../containers/repos'),
-    loading: Loading
-})
-
-const Pins = Loadable({
-    loader: () => import(/* webpackChunkName: 'page-pins' */ '../containers/pins'),
-    loading: Loading
-})
-
-const Events = Loadable({
-    loader: () => import(/* webpackChunkName: 'page-events' */ '../containers/events'),
-    loading: Loading
-})
-
-const Post = Loadable({
-    loader: () => import(/* webpackChunkName: 'page-post' */ '../containers/post'),
-    loading: Loading
-})
-
-const User = Loadable({
-    loader: () => import(/* webpackChunkName: 'page-user' */ '../containers/user'),
-    loading: Loading
-})
-
-const Activities = Loadable({
-    loader: () => import(/* webpackChunkName: 'page-activities' */ '../containers/activities'),
-    loading: Loading
-})
-
-const UserPosts = Loadable({
-    loader: () => import(/* webpackChunkName: 'page-userPosts' */ '../containers/userPosts'),
-    loading: Loading
-})
-
-const UserPins = Loadable({
-    loader: () => import(/* webpackChunkName: 'page-userPins' */ '../containers/userPins'),
-    loading: Loading
-})
-
-const UserLikes = Loadable({
-    loader: () => import(/* webpackChunkName: 'page-userLikes' */ '../containers/userLikes'),
-    loading: Loading
-})
-
-const UserTags = Loadable({
-    loader: () => import(/* webpackChunkName: 'page-userTags' */ '../containers/userTags'),
-    loading: Loading
-})
+const Home = loadable(() => import(/* webpackChunkName: 'page-home' */ '../containers/home'))
+const Books = loadable(() => import(/* webpackChunkName: 'page-books' */ '../containers/books'))
+const Repos = loadable(() => import(/* webpackChunkName: 'page-repos' */ '../containers/repos'))
+const Pins = loadable(() => import(/* webpackChunkName: 'page-pins' */ '../containers/pins'))
+const Events = loadable(() => import(/* webpackChunkName: 'page-events' */ '../containers/events'))
+const Post = loadable(() => import(/* webpackChunkName: 'page-post' */ '../containers/post'))
+const User = loadable(() => import(/* webpackChunkName: 'page-user' */ '../containers/user'))
+const Activities = loadable(() => import(/* webpackChunkName: 'page-activities' */ '../containers/activities'))
+const UserPosts = loadable(() => import(/* webpackChunkName: 'page-userPosts' */ '../containers/userPosts'))
+const UserPins = loadable(() => import(/* webpackChunkName: 'page-userPins' */ '../containers/userPins'))
+const UserLikes = loadable(() => import(/* webpackChunkName: 'page-userLikes' */ '../containers/userLikes'))
+const UserTags = loadable(() => import(/* webpackChunkName: 'page-userTags' */ '../containers/userTags'))
 
 export default {
     Home: deferredAsyncConnect(Home)({

@@ -3,7 +3,6 @@ module.exports = [
     'react-dom',
     'react-router-dom',
     'react-helmet',
-    'react-loadable',
     'react-redux',
     'redux-connect',
     'react-router-config',
@@ -12,11 +11,11 @@ module.exports = [
     '@rematch/loading',
     'immer',
     'axios',
-    'babel-polyfill',
     'classnames',
     'react-toastify',
     'react-content-loader',
     'react-lazyload',
     'react-swipe',
-    'swipe-js-iso'
+    'swipe-js-iso',
+    'react-virtual-list'
 ]

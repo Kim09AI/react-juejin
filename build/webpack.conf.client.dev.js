@@ -3,6 +3,7 @@ const merge = require('webpack-merge')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const path = require('path')
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
+const LoadablePlugin = require('@loadable/webpack-plugin')
 const base = require('./webpack.conf.base')
 const config = require('./config')
 
@@ -125,7 +126,7 @@ module.exports = merge(base, {
         new HtmlWebpackPlugin({
             filename: 'server.ejs',
             template: '!!ejs-compiled-loader!' + r('public/server.template.ejs'),
-            inject: true
+            inject: false // 服务端渲染时手动注入
         }),
         new webpack.HotModuleReplacementPlugin(),
         new webpack.DefinePlugin({
@@ -133,7 +134,8 @@ module.exports = merge(base, {
                 isClient: 'true',
                 isServer: 'false'
             }
-        })
+        }),
+        new LoadablePlugin()
     ],
     devServer: {
         contentBase: r('public'),

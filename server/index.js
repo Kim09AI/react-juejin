@@ -1,6 +1,5 @@
 const express = require('express')
 const path = require('path')
-const Loadable = require('react-loadable')
 const proxy = require('http-proxy-middleware')
 const cookieParser = require('cookie-parser')
 const config = require('./config')
@@ -50,6 +49,4 @@ app.use((err, req, res, next) => {
 })
 
 const port = process.env.PORT || 3000
-Loadable.preloadAll().then(() => {
-    app.listen(port, () => console.log(`server running on http://localhost:${port}`))
-})
+app.listen(port, () => console.log(`server running on http://localhost:${port}`))

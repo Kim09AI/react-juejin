@@ -1,12 +1,11 @@
-import 'babel-polyfill'
+import '@babel/polyfill'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter as Router } from 'react-router-dom'
-import { matchRoutes } from 'react-router-config'
 import { Provider } from 'react-redux'
 import { AppContainer } from 'react-hot-loader' // eslint-disable-line
-import Loadable from 'react-loadable'
 import { ReduxAsyncConnect } from 'redux-connect'
+import { loadableReady } from '@loadable/component'
 
 import registerServiceWorker from './registerServiceWorker'
 import createStore from './store'
@@ -38,23 +37,15 @@ const renderApp = (routes) => {
     )
 }
 
-// eslint-disable-next-line
-;(async () => {
-    // 预加载当前页面匹配的页面组件，当本页面需要的js加载好之后，再进行hydrate
-    // 否则服务端和客户端的渲染结果会不一致导致报错
-    const matches = matchRoutes(routesConfig, window.location.pathname)
-    await Promise.all(matches.map(matched => matched.route.component && matched.route.component.preload && matched.route.component.preload()))
-
-    Loadable.preloadReady().then(() => renderApp(routesConfig))
-})()
+loadableReady(() => {
+    renderApp(routesConfig)
+})
 
 if (module.hot) {
     // react hot reload
     module.hot.accept('./routes', () => {
-        Loadable.preloadReady().then(() => {
-            const routerConfig = require('./routes').default // eslint-disable-line
-            renderApp(routesConfig)
-        })
+        const routerConfig = require('./routes').default // eslint-disable-line
+        renderApp(routesConfig)
     })
 }
 

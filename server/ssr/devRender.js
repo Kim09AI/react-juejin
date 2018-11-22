@@ -3,7 +3,6 @@ const path = require('path')
 const MFS = require('memory-fs')
 const vm = require('vm')
 const NativeModule = require('module')
-const Loadable = require('react-loadable')
 const axios = require('axios')
 const render = require('./render')
 const serverConfig = require('../../build/webpack.conf.server')
@@ -11,6 +10,16 @@ const serverConfig = require('../../build/webpack.conf.server')
 const getTemplate = () => {
     return new Promise((resolve, reject) => {
         axios.get('http://localhost:9000/public/server.ejs')
+            .then(res => {
+                resolve(res.data)
+            })
+            .catch(reject)
+    })
+}
+
+const getStats = () => {
+    return new Promise((resolve, reject) => {
+        axios.get('http://localhost:9000/public/loadable-stats.json')
             .then(res => {
                 resolve(res.data)
             })
@@ -74,6 +83,7 @@ complier.watch({}, (err, stats) => {
     stats.warnings.forEach(warn => console.warn(warn))
 
     serverBundle = _require('./' + serverConfig.output.filename)
+
     console.log('server bundle complie success')
 })
 
@@ -82,13 +92,12 @@ module.exports = function devRender(req, res, next) {
         return res.send('waiting for compile, refresh later!')
     }
 
-    // 预加载好所有使用Loadable做代码分割的bundle
     Promise.all([
-        getTemplate(),
-        Loadable.preloadAll()
+        getStats(),
+        getTemplate()
     ])
-        .then(([template]) => {
-            render(template, serverBundle, req, res, next)
+        .then(([stats, template]) => {
+            render(template, serverBundle, stats, req, res, next)
         })
         .catch(next)
 }
