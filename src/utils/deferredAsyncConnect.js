@@ -1,11 +1,4 @@
-import React from 'react'
 import { asyncConnect } from 'redux-connect'
-
-// 使用@loadable/component做代码分割的组件，不能直接作为asyncConnect(asyncItems)()的参数传入
-// 需要封装成同步组件内
-const dynamicComponentWrapper = (Component) => (props) => (
-    <Component {...props} />
-)
 
 export const deferredAsyncConnect = Component => items => {
     const _items = Array.isArray(items) ? items : [items]
@@ -14,8 +7,12 @@ export const deferredAsyncConnect = Component => items => {
         ? _items.map(item => {
             const { promise, deferred } = item
             const newPromise = !deferred
-                ? options => promise(options)
-                : options => {
+                ? async options => Promise.all([
+                    Component.preload && await Component.preload(),
+                    promise(options)
+                ]).then(res => res[1])
+                : async options => {
+                    Component.preload && await Component.preload()
                     promise(options)
                 }
 
@@ -23,6 +20,6 @@ export const deferredAsyncConnect = Component => items => {
         })
         : _items
 
-    const newComponent = asyncConnect(asyncItems)(dynamicComponentWrapper(Component))
+    const newComponent = asyncConnect(asyncItems)(Component)
     return newComponent
 }

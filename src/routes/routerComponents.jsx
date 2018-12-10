@@ -1,4 +1,4 @@
-import loadable from '@loadable/component'
+import loadable from '../components/loadable'
 import { deferredAsyncConnect } from '../utils/deferredAsyncConnect'
 import { queryParse } from '../utils'
 

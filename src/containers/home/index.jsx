@@ -61,7 +61,7 @@ export default class Home extends React.Component {
         this.state = {
             currentCategoryIndex: -1,
             sortTabs,
-            category: '',
+            category: 'all',
             sort: '',
             search: undefined
         }
