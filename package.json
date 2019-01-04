@@ -95,6 +95,7 @@
     "immer": "^1.7.2",
     "js-cookie": "^2.2.0",
     "lodash-es": "^4.17.11",
+    "nprogress": "^0.2.0",
     "prop-types": "^15.6.2",
     "qs": "^6.5.2",
     "react": "^16.5.1",
